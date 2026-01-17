@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            z-index: -1;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .navbar {
+            background: rgba(124, 58, 237, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            z-index: 1020;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #fff !important;
+        }
+        .hero {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(139, 92, 246, 0.9)), url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 150px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(124, 58, 237, 0.3);
+            z-index: 1;
+        }
+        .hero .container {
+            position: relative;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: white;
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero p {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+        .card {
+            background: white;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(124, 58, 237, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.15);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+        .icon {
+            font-size: 3rem;
+            color: #7c3aed;
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+        .card-text {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        .section-title {
+            margin: 80px 0 50px;
+            text-align: center;
+            color: #7c3aed;
+            font-weight: 700;
+            font-size: 2.5rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+        footer {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(139, 92, 246, 0.3);
+            position: relative;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(to bottom, transparent, rgba(124, 58, 237, 0.1));
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeInUp 1s ease-out;
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(124, 58, 237, 0.2);
+        }
+        footer {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.2rem;
+            }
+            .hero {
+                padding: 80px 0;
+            }
+            .card {
+                margin-bottom: 20px;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#hero">AI Agents Portfolio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#seo">SEO & Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ai-marketing">AI & Marketing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#scraping">Data Scraping</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#advanced">Advanced</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#media">Media</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero" id="hero">
+        <div class="container">
+            <h1>Santhosh HL - AI Agents Portfolio</h1>
+            <p>Explore my collection of powerful n8n workflows for SEO, marketing, and content creation. Discover my marketing portfolio and connect with me.</p>
+            <div class="mt-4">
+                <a href="https://portfolio-nine-iota-34.vercel.app/" class="btn btn-light me-3" target="_blank">View Marketing Portfolio</a>
+                <a href="https://www.linkedin.com/in/santhoshhl2003/" class="btn btn-outline-light" target="_blank">Contact to Build</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container my-5">
+        <h2 class="section-title fade-in" id="seo">SEO and Blog Automation</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-blog icon"></i>
+                        <h5 class="card-title">Blog Automation</h5>
+                        <p class="card-text">Automates blog post creation and publishing.</p>
+                        <p>Efficiently manages content creation, scheduling, and publishing for blogs. Integrates with CMS platforms to streamline workflow.</p>
+                        <ul class="list-unstyled">
+                            <li>• Auto-generate content</li>
+                            <li>• Schedule posts</li>
+                            <li>• SEO optimization</li>
+                        </ul>
+                        <a href="Blog_automation.json" class="btn btn-primary">View Workflow</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-edit icon"></i>
+                        <h5 class="card-title">Blog Post Generator</h5>
+                        <p class="card-text">Generates high-quality blog posts.</p>
+                        <p>Uses AI to create engaging, well-researched blog content based on topics and keywords.</p>
+                        <ul class="list-unstyled">
+                            <li>• AI-powered writing</li>
+                            <li>• Keyword integration</li>
+                            <li>• Multiple formats</li>
+                        </ul>
+                        <a href="Blog_Post.json" class="btn btn-primary">View Workflow</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-search icon"></i>
+                        <h5 class="card-title">SEO Keyword Clusters</h5>
+                        <p class="card-text">Keyword clustering for SEO.</p>
+                        <p>Groups related keywords to optimize content strategy and improve search rankings.</p>
+                        <ul class="list-unstyled">
+                            <li>• Cluster analysis</li>
+                            <li>• SERP insights</li>
+                            <li>• Content planning</li>
+                        </ul>
+                        <a href="SEO___Blog_Post___Keyword_Clusters___Template_UPDATED_SKOOL (1).json" class="btn btn-primary">View Workflow</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line icon"></i>
+                        <h5 class="card-title">SEO Trends Template</h5>
+                        <p class="card-text">Trend analysis for blog posts.</p>
+                        <p>Analyzes current trends to create timely, relevant content that boosts engagement.</p>
+                        <ul class="list-unstyled">
+                            <li>• Trend monitoring</li>
+                            <li>• Data visualization</li>
+                            <li>• Predictive insights</li>
+                        </ul>
+                        <a href="SEO___Blog_Post___Trends___Template_SKOOL (1).json" class="btn btn-primary">View Workflow</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-clipboard-check icon"></i>
+                            <h5 class="card-title">SEO Audit Workflow</h5>
+                            <p class="card-text">Automates SEO audits.</p>
+                        
+                            <h5>SEO Audit Workflow</h5>
+                            <p>Performs comprehensive SEO audits, identifying issues and opportunities for improvement.</p>
+                            <ul class="list-unstyled">
+                                <li>• Site analysis</li>
+                                <li>• Performance metrics</li>
+                                <li>• Actionable reports</li>
+                            </ul>
+                            <a href="seo_audit_workflow_n_8_n.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title fade-in" id="ai-marketing">AI and Marketing</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-newspaper icon"></i>
+                            <h5 class="card-title">AI Newsletter</h5>
+                            <p class="card-text">Generates AI-powered newsletters.</p>
+                        
+                            <h5>AI Newsletter</h5>
+                            <p>Creates personalized, engaging newsletters using AI to analyze subscriber preferences.</p>
+                            <ul class="list-unstyled">
+                                <li>• AI content generation</li>
+                                <li>• Personalization</li>
+                                <li>• Automated sending</li>
+                            </ul>
+                            <a href="AI Newsletter.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-users icon"></i>
+                            <h5 class="card-title">AI Marketing Team</h5>
+                            <p class="card-text">AI-driven marketing workflows.</p>
+                        
+                            <h5>AI Marketing Team</h5>
+                            <p>Coordinates marketing efforts with AI assistance for strategy, execution, and analytics.</p>
+                            <ul class="list-unstyled">
+                                <li>• Campaign management</li>
+                                <li>• AI insights</li>
+                                <li>• Performance tracking</li>
+                            </ul>
+                            <a href="AI_Marketing_Team.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fab fa-linkedin icon"></i>
+                            <h5 class="card-title">Auto LinkedIn Posts</h5>
+                            <p class="card-text">Automated LinkedIn posting.</p>
+                        
+                            <h5>Auto LinkedIn Posts</h5>
+                            <p>Automatically creates and posts content to LinkedIn based on predefined schedules and topics.</p>
+                            <ul class="list-unstyled">
+                                <li>• Content scheduling</li>
+                                <li>• Engagement tracking</li>
+                                <li>• Multi-platform posting</li>
+                            </ul>
+                            <a href="Auto LinkedIn Posts.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fab fa-linkedin icon"></i>
+                            <h5 class="card-title">LinkedIn Post</h5>
+                            <p class="card-text">LinkedIn post creation.</p>
+                        
+                            <h5>LinkedIn Post</h5>
+                            <p>Generates optimized LinkedIn posts with AI assistance for better reach and engagement.</p>
+                            <ul class="list-unstyled">
+                                <li> AI writing</li>
+                                <li> Hashtag optimization</li>
+                                <li> Performance analytics</li>
+                            </ul>
+                            <a href="LinkedIn_Post.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fab fa-youtube icon"></i>
+                            <h5 class="card-title">YouTube Strategist</h5>
+                            <p class="card-text">YouTube content strategy.</p>
+                        
+                            <h5>YouTube Strategist</h5>
+                            <p>Develops comprehensive YouTube strategies including content planning, SEO, and growth tactics.</p>
+                            <ul class="list-unstyled">
+                                <li> Content strategy</li>
+                                <li> SEO optimization</li>
+                                <li> Audience analysis</li>
+                            </ul>
+                            <a href="YouTube_Strategist.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title fade-in" id="scraping">Data Scraping and Research</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-shopping-cart icon"></i>
+                            <h5 class="card-title">Product Scraper</h5>
+                            <p class="card-text">Scrapes product data.</p>
+                        
+                            <h5>Product Scraper</h5>
+                            <p>Extracts product information from e-commerce sites for market research and pricing analysis.</p>
+                            <ul class="list-unstyled">
+                                <li> Data extraction</li>
+                                <li> Price monitoring</li>
+                                <li> Competitor analysis</li>
+                            </ul>
+                            <a href="Product_Scraper.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fab fa-youtube icon"></i>
+                            <h5 class="card-title">YouTube Data Scraper</h5>
+                            <p class="card-text">Scrapes YouTube data.</p>
+                        
+                            <h5>YouTube Data Scraper</h5>
+                            <p>Gathers video statistics, comments, and metadata for content analysis and strategy.</p>
+                            <ul class="list-unstyled">
+                                <li> Video analytics</li>
+                                <li> Comment extraction</li>
+                                <li> Trend identification</li>
+                            </ul>
+                            <a href="YouTube_Data_Scraper.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fab fa-linkedin icon"></i>
+                            <h5 class="card-title">LinkedIn Scraper</h5>
+                            <p class="card-text">LinkedIn data scraping.</p>
+                        
+                            <h5>LinkedIn Scraper</h5>
+                            <p>Collects professional data from LinkedIn for networking, recruitment, and market research.</p>
+                            <ul class="list-unstyled">
+                                <li> Profile data</li>
+                                <li> Company insights</li>
+                                <li> Network analysis</li>
+                            </ul>
+                            <a href="redacted-linkedin-scraper.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-images icon"></i>
+                            <h5 class="card-title">Search Images</h5>
+                            <p class="card-text">Image search workflows.</p>
+                        
+                            <h5>Search Images</h5>
+                            <p>Performs advanced image searches and analysis for content creation and research.</p>
+                            <ul class="list-unstyled">
+                                <li> Reverse image search</li>
+                                <li> Image recognition</li>
+                                <li> Content tagging</li>
+                            </ul>
+                            <a href="Search_Images.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title fade-in" id="advanced">AI Agents and Advanced Workflows</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-robot icon"></i>
+                            <h5 class="card-title">AI SDR Setup</h5>
+                            <p class="card-text">AI Sales Development setup.</p>
+                        
+                            <h5>AI SDR Setup</h5>
+                            <p>Configures AI-powered Sales Development Representatives for lead generation and outreach.</p>
+                            <ul class="list-unstyled">
+                                <li> Lead scoring</li>
+                                <li> Automated outreach</li>
+                                <li> CRM integration</li>
+                            </ul>
+                            <a href="Complete_AI_SDR_Setup(2).json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-brain icon"></i>
+                            <h5 class="card-title">Dynamic Models</h5>
+                            <p class="card-text">Dynamic AI model workflows.</p>
+                        
+                            <h5>Dynamic Models</h5>
+                            <p>Manages and switches between different AI models based on task requirements and performance.</p>
+                            <ul class="list-unstyled">
+                                <li> Model selection</li>
+                                <li> Performance optimization</li>
+                                <li> Adaptive learning</li>
+                            </ul>
+                            <a href="Dynamic_Models.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-search-plus icon"></i>
+                            <h5 class="card-title">RAG Reranking</h5>
+                            <p class="card-text">RAG with reranking.</p>
+                        
+                            <h5>RAG Reranking</h5>
+                            <p>Enhances Retrieval-Augmented Generation by reranking results for better accuracy and relevance.</p>
+                            <ul class="list-unstyled">
+                                <li> Improved retrieval</li>
+                                <li> Quality scoring</li>
+                                <li> Context awareness</li>
+                            </ul>
+                            <a href="RAG_Reranking.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-database icon"></i>
+                            <h5 class="card-title">Supabase Postgres</h5>
+                            <p class="card-text">Supabase integration.</p>
+                        
+                            <h5>Supabase Postgres</h5>
+                            <p>Connects workflows to Supabase PostgreSQL for robust data storage and real-time capabilities.</p>
+                            <ul class="list-unstyled">
+                                <li> Real-time data</li>
+                                <li> Secure storage</li>
+                                <li> API integration</li>
+                            </ul>
+                            <a href="Supabase_Postgres.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title fade-in" id="media">Media and Content Creation</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-image icon"></i>
+                            <h5 class="card-title">Create Image</h5>
+                            <p class="card-text">Image generation.</p>
+                        
+                            <h5>Create Image</h5>
+                            <p>Generates high-quality images using AI based on text descriptions and style preferences.</p>
+                            <ul class="list-unstyled">
+                                <li> AI image generation</li>
+                                <li> Style customization</li>
+                                <li> Batch processing</li>
+                            </ul>
+                            <a href="Create_Image.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-edit icon"></i>
+                            <h5 class="card-title">Edit Image</h5>
+                            <p class="card-text">Image editing.</p>
+                        
+                            <h5>Edit Image</h5>
+                            <p>Provides advanced image editing capabilities including cropping, filtering, and enhancement.</p>
+                            <ul class="list-unstyled">
+                                <li> Photo editing</li>
+                                <li> Filter application</li>
+                                <li> Quality enhancement</li>
+                            </ul>
+                            <a href="Edit_Image.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-video icon"></i>
+                            <h5 class="card-title">Faceless Video</h5>
+                            <p class="card-text">Video creation.</p>
+                        
+                            <h5>Faceless Video</h5>
+                            <p>Creates engaging videos without human faces, using animations, text, and voiceovers.</p>
+                            <ul class="list-unstyled">
+                                <li> Animation creation</li>
+                                <li> Voice synthesis</li>
+                                <li> Automated editing</li>
+                            </ul>
+                            <a href="Faceless_Video.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title fade-in">Advanced n8n Workflows</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-comments icon"></i>
+                            <h5 class="card-title">RAG Pipeline & Chatbot</h5>
+                            <p class="card-text">RAG pipeline for chatbots.</p>
+                        
+                            <h5>RAG Pipeline & Chatbot</h5>
+                            <p>Implements advanced RAG pipelines for intelligent chatbot interactions and knowledge retrieval.</p>
+                            <ul class="list-unstyled">
+                                <li> Knowledge base</li>
+                                <li> Conversational AI</li>
+                                <li> Context understanding</li>
+                            </ul>
+                            <a href="n8n/1) RAG Pipeline & Chatbot.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fas fa-headset icon"></i>
+                            <h5 class="card-title">Customer Support Workflow</h5>
+                            <p class="card-text">Automates customer support.</p>
+                        
+                            <h5>Customer Support Workflow</h5>
+                            <p>Streamlines customer support processes with automated responses, ticketing, and escalation.</p>
+                            <ul class="list-unstyled">
+                                <li> Auto-responses</li>
+                                <li> Ticket management</li>
+                                <li> Sentiment analysis</li>
+                            </ul>
+                            <a href="n8n/2) Customer Support Workflow.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card fade-in h-100">
+                    <div class="card-body text-center">
+                            <i class="fab fa-linkedin icon"></i>
+                            <h5 class="card-title">LinkedIn Workflow</h5>
+                            <p class="card-text">LinkedIn automation.</p>
+                        
+                            <h5>LinkedIn Workflow</h5>
+                            <p>Automates LinkedIn activities including posting, networking, and engagement tracking.</p>
+                            <ul class="list-unstyled">
+                                <li> Post automation</li>
+                                <li> Connection management</li>
+                                <li> Analytics reporting</li>
+                            </ul>
+                            <a href="n8n/3) LinkedIn Workflow.json" class="btn btn-primary">View Workflow</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Santhosh HL - AI Agents Portfolio. Built with n8n workflows.</p>
+            <div class="mt-3">
+                <a href="https://portfolio-nine-iota-34.vercel.app/" class="text-white me-3" target="_blank">Marketing Portfolio</a>
+                <a href="https://www.linkedin.com/in/santhoshhl2003/" class="text-white" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling for navbar links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add mouse follow effect
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.createElement('div');
+            cursor.style.position = 'fixed';
+            cursor.style.width = '20px';
+            cursor.style.height = '20px';
+            cursor.style.borderRadius = '50%';
+            cursor.style.background = 'rgba(238, 119, 82, 0.3)';
+            cursor.style.pointerEvents = 'none';
+            cursor.style.zIndex = '9999';
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            cursor.style.transition = 'all 0.1s ease';
+            document.body.appendChild(cursor);
+            setTimeout(() => {
+                cursor.remove();
+            }, 100);
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        });
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+

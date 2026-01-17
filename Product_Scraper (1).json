@@ -1,0 +1,454 @@
+{
+  "name": "Product Scraper",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1280,
+        20
+      ],
+      "id": "d4b75099-8a6f-4bfc-9a0e-7ec31a886ac8",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "Default",
+        "operation": "Scrape A Url And Get Its Content",
+        "url": "https://www.ebay.com/deals/trending/tech/laptops-netbooks",
+        "formats": [
+          "markdown"
+        ],
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-firecrawl.fireCrawl",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        20
+      ],
+      "id": "82060228-038d-4b98-b0e2-e38e60447d3d",
+      "name": "FireCrawl",
+      "credentials": {
+        "fireCrawlApi": {
+          "id": "Wj8o8KVWPQRQafFU",
+          "name": "FireCrawl account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        240
+      ],
+      "id": "fdd01398-74f6-45d9-be76-5f745d57028b",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tnRhGyer7lqnWIQq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Get Markdowns\n- Fetch Web Content\n- Scrapes the target URL provided by the trigger.",
+        "height": 360,
+        "width": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        -140
+      ],
+      "id": "9b23653b-1bba-4ca0-b256-8025ece25565",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Extract all product listings from the provided text and return them as a JSON array of objects. Each object must have the following fields:\n\n{{ $json.fields.map(f => `\"${f}\": \"string\"`).join(',\\n  ') }}\n\nStructure the output strictly like this:\n\n[\n  {\n    {{ $json.fields.map(f => `\"${f}\": \"string\"`).join(',\\n  ') }}\n  }\n]\n\nDo not include markdown, explanations, or any additional text — only return valid JSON.\nhere is the entire data below\\n\\n\n{{ $('FireCrawl').item.json.data.markdown }}\n\n",
+        "hasOutputParser": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        -440,
+        20
+      ],
+      "id": "ebcfe6b0-6dd6-4f71-b414-0907a5445ac7",
+      "name": "Parse Data with LLM"
+    },
+    {
+      "parameters": {
+        "options": {
+          "prompt": "=Instructions:\n--------------\n{instructions}\n--------------\nCompletion:\n--------------\n{completion}\n--------------\n\nAbove, the Completion did not satisfy the constraints given in the Instructions.\nError:\n--------------\n{error}\n--------------\n\nPlease try again. Please only respond with an answer that satisfies the constraints laid out in the Instructions:"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        240
+      ],
+      "id": "7735eea2-216f-4ec5-9c7f-b7719c289a7e",
+      "name": "Auto-fixing Output Parser"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n    \"product_name\": \"string\",\n  \"price\": \"string\",\n  \"original_price\": \"string\",\n  \"discount_percentage\": \"string\",\n  \"product_url\": \"string\",\n  \"image_url\": \"string\",\n  \"shipping\": \"string\",\n  \"condition\": \"string\"\n  }\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -100,
+        420
+      ],
+      "id": "4cf5bd6c-e017-47c1-990a-16959263a806",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "={{\"Ebay_Trending_\"+ $now.format('yyyy-MM-dd__HH-mm-ss') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        180,
+        40
+      ],
+      "id": "cf0f6b78-bec5-4443-8b2d-579a200c2d9d",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZJPURaOeAx1sfTkp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $('Google Sheets').item.json[\"spreadsheetId\"] }}/values/Sheet1!A1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "valueInputOption",
+              "value": "RAW"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "range",
+              "value": "Sheet1!A1"
+            },
+            {
+              "name": "values",
+              "value": "={{ $('Code').item.json.sheetData }}"
+            },
+            {
+              "name": "majorDimension",
+              "value": "ROWS"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        40
+      ],
+      "id": "79c191a1-d7c5-485b-9d76-35a4c69d9c09",
+      "name": "HTTP Request",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZJPURaOeAx1sfTkp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "777d9e05-7393-4ca1-8625-57b00e0506b8",
+              "name": "fields",
+              "value": "=[\"product_name\",\"price\",\"original_price\",\"discount_percentage\",\"product_url\",\"image_url\",\"shipping\",\"condition\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -740,
+        20
+      ],
+      "id": "c5149875-9c71-48c1-8338-180555be7502",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        420
+      ],
+      "id": "187444e1-6130-4efe-89e6-bfb476b9fbce",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tnRhGyer7lqnWIQq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Access the first input item directly, assuming one is present\nconst inputItem = $input.first();\n\n// --- Adjust this key if your product list is under a different name ---\nconst productKey = 'output';\n// ---\n\n// Get the array of product objects, default to empty array if not found or not an array\nconst products = Array.isArray(inputItem.json[productKey]) ? inputItem.json[productKey] : [];\n\n// Define the order of columns AND the header row itself\nconst headerRow = [ // Renamed for clarity\n    'product_name',\n    'price',\n    'original_price',\n    'discount_percentage',\n    'product_url',\n    'image_url',\n    'shipping',\n    'condition'\n];\n\n// Transform the array of product objects into an array of data rows\n// Use || '' to provide an empty string if a product field is missing/null/undefined\nconst dataRows = products.map(product => {\n    // Basic check if product is an object\n    if (typeof product !== 'object' || product === null) {\n        return headerRow.map(() => ''); // Return empty row based on header count\n    }\n    // Create a data row based on the header order\n    return headerRow.map(col_name => product[col_name] || '');\n});\n\n// Combine the header row and the data rows into the final array\nconst sheetDataWithHeaders = [headerRow, ...dataRows];\n\n// Return the standard n8n structure: an array containing one item object.\n// The item object has a 'json' property containing our transformed data + headers.\nreturn [\n  {\n    json: {\n      // Use the combined array including the header\n      sheetData: sheetDataWithHeaders\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -140,
+        20
+      ],
+      "id": "0cae127f-3f57-49c6-9bec-b850e8012489",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "content": "## Define the Fields of your scraping\n- Define Data Structure\n- Sets the expected fields/schema for data extraction.",
+        "height": 360,
+        "width": 280,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -840,
+        -140
+      ],
+      "id": "5a2e7aef-a952-4585-bafb-8a15df7b9ea5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Parse the scraping\n- Extract with AI\n- Uses Gemini LLM to parse structured data from scraped content.",
+        "height": 740,
+        "width": 620,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -540,
+        -140
+      ],
+      "id": "c58d0327-0d2b-4a1c-acb4-0e27fabda0a0",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Format\n- Format for Sheets\n- Transforms extracted JSON into array format (rows/columns) with headers.\n",
+        "height": 360,
+        "width": 260,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        100,
+        -140
+      ],
+      "id": "70faa3d9-a40f-4224-be70-d4d23f143c58",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Save the data to google spreadsheet\n- Write to Google Sheet\n- Sends formatted data to the specified Sheet via API call.\n",
+        "height": 360,
+        "width": 260,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        380,
+        -140
+      ],
+      "id": "ca7f7d57-b506-46d0-aa8c-d2eec2d8d3bc",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "##📄 Workflow Documentation & Contact 📄- Fetch Web Content\n📄 Workflow Documentation & Contact 📄\n\n**Process Overview:**\nThis workflow automates the process of scraping product data from a web page, extracting structured information using an AI model (Gemini), formatting that data correctly, and saving it directly into a Google Sheet, including headers.\n\n1.  **Scrape:** FireCrawl fetches the raw content from a target URL.\n2.  **Define:** The 'Edit Fields' node outlines the desired data structure.\n3.  **Parse:** An LLM extracts the data according to the defined structure.\n4.  **Format:** The Code node converts the extracted JSON into the specific Array<Array<string>> format needed by the Google Sheets API (including headers).\n5.  **Save:** An HTTP Request node uses the Google Sheets API (v4 spreadsheets.values.update) to write the formatted data into the target spreadsheet range.\n\n**Setup:**\nRequires Google Sheets API credentials configured in the HTTP Request node for authentication. The target Spreadsheet ID and sheet name must be correct.\n\n---\n**Connect & Learn More Automation!**\n\n💼 𝗟𝗶𝗻𝗸𝗲𝗱𝗜𝗻: https://www.linkedin.com/in/reda-marzouk-rpa/\n📸 𝗜𝗻𝘀𝘁𝗮𝗴𝗿𝗮𝗺: https://www.instagram.com/redamarzouk.rpa/\n🤖 𝗬𝗼𝘂𝗧𝘂𝗯𝗲: https://www.youtube.com/@redamarzouk/videos (Subscribe!)\n🌐 Website: https://www.automation-campus.com/\n\nThanks for checking out the workflow!\n- Reda",
+        "height": 600,
+        "width": 760,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1560,
+        -800
+      ],
+      "id": "4386b24b-2699-4839-a04e-021cb805d6ba",
+      "name": "Sticky Note5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "FireCrawl",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FireCrawl": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Parse Data with LLM",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Data with LLM": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Parse Data with LLM",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Parse Data with LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3b7506c8-7e66-437e-bd80-ec6c4adb6890",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "202dfaf55a852ded26b73d1c4fda411440e38babed24afff97f46af2588afa28"
+  },
+  "id": "eaW5qVmNCrdO9rTt",
+  "tags": []
+}

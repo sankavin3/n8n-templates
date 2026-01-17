@@ -1,0 +1,108 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Input URL",
+      "type": "n8n-nodes-base.set",
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "url",
+              "value": "https://example.com"
+            }
+          ]
+        }
+      },
+      "position": [200, 300]
+    },
+    {
+      "id": "2",
+      "name": "Fetch HTML",
+      "type": "n8n-nodes-base.httpRequest",
+      "parameters": {
+        "url": "={{$json[\"url\"]}}",
+        "method": "GET",
+        "responseFormat": "string"
+      },
+      "position": [400, 300]
+    },
+    {
+      "id": "3",
+      "name": "Extract SEO Tags",
+      "type": "n8n-nodes-base.function",
+      "parameters": {
+        "functionCode": "const html = $json.body;
+const title = html.match(/<title>(.*?)<\\/title>/i)?.[1] || '';
+const metaDesc = html.match(/<meta name=\\"description\\" content=\\"(.*?)\\"/i)?.[1] || '';
+const h1 = html.match(/<h1[^>]*>(.*?)<\\/h1>/i)?.[1] || '';
+return [{ title, metaDescription: metaDesc, h1, fullHTML: html }];"
+      },
+      "position": [600, 300]
+    },
+    {
+      "id": "4",
+      "name": "Send to Ollama",
+      "type": "n8n-nodes-base.httpRequest",
+      "parameters": {
+        "url": "http://localhost:11434/api/generate",
+        "method": "POST",
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "bodyParametersJson": "{\n  \"model\": \"gemma3:1b\",\n  \"prompt\": \"Audit the following HTML for SEO best practices:\\n\" + $json.fullHTML\n}"
+      },
+      "position": [800, 300]
+    },
+    {
+      "id": "5",
+      "name": "Get Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "parameters": {
+        "url": "={{$json[\"url\"].replace(/\\/$/, '') + '/sitemap.xml'}}",
+        "method": "GET",
+        "responseFormat": "string"
+      },
+      "position": [400, 500]
+    },
+    {
+      "id": "6",
+      "name": "Extract URLs from Sitemap",
+      "type": "n8n-nodes-base.function",
+      "parameters": {
+        "functionCode": "const urls = [];
+const matches = $json.body.matchAll(/<loc>(.*?)<\\/loc>/g);
+for (const match of matches) urls.push({ url: match[1] });
+return urls.slice(0, 10);"
+      },
+      "position": [600, 500]
+    },
+    {
+      "id": "7",
+      "name": "Check URL Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "parameters": {
+        "url": "={{$json.url}}",
+        "method": "HEAD",
+        "responseFormat": "string"
+      },
+      "position": [800, 500]
+    }
+  ],
+  "connections": {
+    "Input URL": {
+      "main": [["Fetch HTML", "Get Sitemap"]]
+    },
+    "Fetch HTML": {
+      "main": [["Extract SEO Tags"]]
+    },
+    "Extract SEO Tags": {
+      "main": [["Send to Ollama"]]
+    },
+    "Get Sitemap": {
+      "main": [["Extract URLs from Sitemap"]]
+    },
+    "Extract URLs from Sitemap": {
+      "main": [["Check URL Status"]]
+    }
+  }
+}

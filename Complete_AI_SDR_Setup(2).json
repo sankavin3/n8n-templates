@@ -1,0 +1,2954 @@
+{
+  "name": "Complete AI SDR Setup",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "71a6b9d4-5b02-4554-9464-ec387d777ea1",
+              "leftValue": "={{ $('Webhook').item.json.body.event }}",
+              "rightValue": "ended",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -2900,
+        300
+      ],
+      "id": "2f86c349-2408-463a-9c75-e9e4ab50402f",
+      "name": "call status: ended",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=\"{{ $('Edit Fields').item.json.body.call_analysis.custom_analysis_data.summary }}\" \n\nGiven above in inverted commas is a summary of a cold call which you have to Analyze and find out if the prospect has 1. booked an appointment or a call (MENTIONED A DATE AND TIME FOR THE CALL BACK) OR \n2. Interested but wants to be called in the future OR \n3. None out of those 2 situations OR\n4. They ended the call or basically rejected the offer due to some reason\n\nYou have to give 1 out of these 3 responses according to the situation. for 1. \"BOOKED\", for 2. \"FUTURE\", for 3. \"UNKNOWN\", for 4.\"REJECTED\"\n\nNO OTHER RESPONSES THAN THESE 4"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        -800,
+        300
+      ],
+      "id": "bba4d7eb-796d-41d1-966e-bb2c74266150",
+      "name": "find interest",
+      "credentials": {
+        "openAiApi": {
+          "id": "5xcfskuu2WudNB7x",
+          "name": "Aaroh's open ai account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "251a78c5-07d9-4d80-863f-ffce235e023e",
+              "leftValue": "={{ $json.message.content }}",
+              "rightValue": "booked",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -400,
+        100
+      ],
+      "id": "5609c981-f9f7-40c6-ae47-c60b9c32bb69",
+      "name": "booked app"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3fec2538-dc0c-4d8c-b31b-ad9b1b3f8ec0",
+              "name": "body",
+              "value": "={{ $('Get call details').item.json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1120,
+        300
+      ],
+      "id": "1515e921-7783-48a0-a43f-4fe9d8aa6989",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "251a78c5-07d9-4d80-863f-ffce235e023e",
+              "leftValue": "={{ $json.message.content }}",
+              "rightValue": "REJECT",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        540
+      ],
+      "id": "3339f880-dc11-4d09-8a3d-a5c7018c3039",
+      "name": "rejected"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $('Edit Fields').item.json.body.metadata.company_name }}",
+            "phone_number": "={{ $('Edit Fields').item.json.body.to_number }}",
+            "summary": "={{ $('summary1').item.json.message.content }}",
+            "recording url": "={{ $('Edit Fields').item.json.body.recording_url }}",
+            "their email": "={{ $('Edit Fields').item.json.body.metadata['email in list'] }}",
+            "when was the call sent to them": "={{ $('Get call details').item.json.headers.date }}",
+            "why did they reject the offer?": "={{ $json.message.content }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recording url",
+              "displayName": "recording url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "when was the call sent to them",
+              "displayName": "when was the call sent to them",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "their email",
+              "displayName": "their email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "why did they reject the offer?",
+              "displayName": "why did they reject the offer?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        540,
+        600
+      ],
+      "id": "1a84053c-aeec-413e-8858-9bc7ead5ae75",
+      "name": "rejected offer",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $('Edit Fields').item.json.body.metadata.company_name }}",
+            "phone_number": "={{ $('Edit Fields').item.json.body.to_number }}",
+            "summary": "={{ $json.message.content }}",
+            "recording url": "={{ $('Edit Fields').item.json.body.recording_url }}",
+            "their email": "={{ $('Edit Fields').item.json.body.metadata['email in list'] }}",
+            "what time and date did they book a call for": "=Refer to summary",
+            "when was the call sent to them": "={{ $('Get call details').item.json.headers.date }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recording url",
+              "displayName": "recording url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "when was the call sent to them",
+              "displayName": "when was the call sent to them",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "their email",
+              "displayName": "their email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "what time and date did they book a call for",
+              "displayName": "what time and date did they book a call for",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        200,
+        -180
+      ],
+      "id": "9205d518-8cbc-4c1a-be02-9409fca33ff5",
+      "name": "booked",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $('Edit Fields').item.json.body.metadata.company_name }}",
+            "phone_number": "={{ $('Edit Fields').item.json.body.to_number }}",
+            "summary": "={{ $json.message.content }}",
+            "recording url": "={{ $('Edit Fields').item.json.body.recording_url }}",
+            "their email": "={{ $('Edit Fields').item.json.body.metadata['email in list'] }}",
+            "what time and date did they book a call for": "=FUTURE - refer to summary",
+            "when was the call sent to them": "={{ $('Get call details').item.json.headers.date }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recording url",
+              "displayName": "recording url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "when was the call sent to them",
+              "displayName": "when was the call sent to them",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "their email",
+              "displayName": "their email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "what time and date did they book a call for",
+              "displayName": "what time and date did they book a call for",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        420,
+        240
+      ],
+      "id": "0312fb97-bb02-43f2-9ac4-84b5a6ec3a87",
+      "name": "future",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=\"{{ $('Edit Fields').item.json.body.transcript }}\" \n\nGiven above in inverted commas is the transcript of a cold call between a user and an AI Agent which you have to Analyze and find out that why did the user end the call exactly. the reason may or may not be shown to you in the transcript, but you have to understand the exact tone of the user talking with the agent, and then give me just that reason in the final output, nothing else!!!\n\nAnalyze each and every single word said by the user for the responses to the AI's questions, and tell me the reason due to which the call was ended in not more than 1 line.\n\nGive me only the reason to end the call as the output, nothing else!!!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        80,
+        560
+      ],
+      "id": "e5893ceb-96fe-4f1f-a5de-ef74ac86b512",
+      "name": "reason for rejection",
+      "credentials": {
+        "openAiApi": {
+          "id": "5xcfskuu2WudNB7x",
+          "name": "Aaroh's open ai account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "95854a96-33c6-4b9c-b7eb-afabfb33aa3d",
+              "leftValue": "={{ $('human or voicemail').item.json.message.content }}",
+              "rightValue": "human",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -1540,
+        0
+      ],
+      "id": "5928cdf3-70d4-47b4-b0be-7b3a309b9221",
+      "name": "human"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "95854a96-33c6-4b9c-b7eb-afabfb33aa3d",
+              "leftValue": "={{ $('human or voicemail').item.json.message.content }}",
+              "rightValue": "voice",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -2080,
+        720
+      ],
+      "id": "9517051a-e90e-4348-93b2-5854dd08f1db",
+      "name": "voicemail"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "date",
+              "lookupValue": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -2060,
+        300
+      ],
+      "id": "c5eed1b9-7cbc-4b59-8bd4-2de26016a03b",
+      "name": "get row number",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "date",
+              "lookupValue": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1320,
+        0
+      ],
+      "id": "6d3f73c4-0462-4a30-948d-7846aa3651ed",
+      "name": "get row number1",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  if (item?.json.hasOwnProperty(\"human calls picked\")) {\n    item.json[\"human calls picked\"] += 1;\n  }\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1100,
+        0
+      ],
+      "id": "e21ff8a7-0873-4c46-8fc3-456c6414b25d",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "date",
+              "lookupValue": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1660,
+        940
+      ],
+      "id": "0db51839-4d79-4954-a98e-ee9d038c3284",
+      "name": "get row number2",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  item.json.voicemails = item.json.voicemails + 1;\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1520,
+        740
+      ],
+      "id": "84668e2e-eeba-4316-9bb9-e5052da8e05b",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "date": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}",
+            "human calls picked": "={{ $json['human calls picked'] }}"
+          },
+          "matchingColumns": [
+            "date"
+          ],
+          "schema": [
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calls sent",
+              "displayName": "calls sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "human calls picked",
+              "displayName": "human calls picked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "voicemails",
+              "displayName": "voicemails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "appointments booked",
+              "displayName": "appointments booked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "offer rejected",
+              "displayName": "offer rejected",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "cost incurred",
+              "displayName": "cost incurred",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -840,
+        0
+      ],
+      "id": "676c34dc-3b7d-43cd-a468-af54d34741bb",
+      "name": "add humans calls picked value",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "date": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}",
+            "voicemails": "={{ $json.voicemails }}"
+          },
+          "matchingColumns": [
+            "date"
+          ],
+          "schema": [
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calls sent",
+              "displayName": "calls sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "human calls picked",
+              "displayName": "human calls picked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "voicemails",
+              "displayName": "voicemails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "appointments booked",
+              "displayName": "appointments booked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "offer rejected",
+              "displayName": "offer rejected",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cost incurred",
+              "displayName": "cost incurred",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1160,
+        740
+      ],
+      "id": "9be87de7-1282-4064-abfc-778ea2369397",
+      "name": "add voicemails value",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "date": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}",
+            "appointments booked": "={{ $json.updatedAppointmentsBooked }}"
+          },
+          "matchingColumns": [
+            "date"
+          ],
+          "schema": [
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calls sent",
+              "displayName": "calls sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "human calls picked",
+              "displayName": "human calls picked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "voicemails",
+              "displayName": "voicemails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "appointments booked",
+              "displayName": "appointments booked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "offer rejected",
+              "displayName": "offer rejected",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cost incurred",
+              "displayName": "cost incurred",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1100,
+        -100
+      ],
+      "id": "c2b89a40-78ed-4616-994b-db6400345aa1",
+      "name": "update appointments booked value",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1ch5bMLWe8SqTgy--16Ujxfa0E1waOu5_pPBxmJ8gBKg",
+          "mode": "list",
+          "cachedResultName": "chandramohan analysis  results",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ch5bMLWe8SqTgy--16Ujxfa0E1waOu5_pPBxmJ8gBKg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 183516615,
+          "mode": "list",
+          "cachedResultName": "overall campaign details",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ch5bMLWe8SqTgy--16Ujxfa0E1waOu5_pPBxmJ8gBKg/edit#gid=183516615"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "date",
+              "lookupValue": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        580,
+        -100
+      ],
+      "id": "f57f5802-a35a-4ba4-9e74-b62e4b62f8ce",
+      "name": "get row number3",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rowData = $input.all().map((item) => item.json)[0];\nconst appointmentsBooked = rowData[\"appointments booked\"];\nconst updatedAppointmentsBooked = appointmentsBooked + 1;\n\nreturn { updatedAppointmentsBooked };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        860,
+        -80
+      ],
+      "id": "87f04104-20c7-4818-8505-bac1f0b19ff1",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "date",
+              "lookupValue": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        920,
+        620
+      ],
+      "id": "741c5bb7-858d-4a0a-a73a-c8f6eab3a4f3",
+      "name": "get row number4",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\nconst rejectedOffersRow = rows.find((row) => row?.json?.[\"offer rejected\"]);\nlet rejectedOffersCount =\n  parseInt(rejectedOffersRow?.json?.[\"offer rejected\"]) || 0;\nrejectedOffersCount += 1;\nreturn { \"offer rejected\": rejectedOffersCount.toString() };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        620
+      ],
+      "id": "5ea4198b-a4f5-4d46-87f8-c1ba612de739",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "date": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}",
+            "offer rejected": "={{ $json['offer rejected'] }}"
+          },
+          "matchingColumns": [
+            "date"
+          ],
+          "schema": [
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calls sent",
+              "displayName": "calls sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "human calls picked",
+              "displayName": "human calls picked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "voicemails",
+              "displayName": "voicemails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "appointments booked",
+              "displayName": "appointments booked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "offer rejected",
+              "displayName": "offer rejected",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cost incurred",
+              "displayName": "cost incurred",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1400,
+        620
+      ],
+      "id": "7dd32b74-5d0c-4fec-b45e-4afbf3282567",
+      "name": "add rejected offer value",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "date": "={{ $('Webhook').item.json.body.call.metadata['current formatted date'] }}",
+            "calls sent": "={{ $('add calls sent').item.json.result }}",
+            "cost incurred": "={{ $json.result }}"
+          },
+          "matchingColumns": [
+            "date"
+          ],
+          "schema": [
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calls sent",
+              "displayName": "calls sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "human calls picked",
+              "displayName": "human calls picked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "voicemails",
+              "displayName": "voicemails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "appointments booked",
+              "displayName": "appointments booked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "offer rejected",
+              "displayName": "offer rejected",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "cost incurred",
+              "displayName": "cost incurred",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1300,
+        300
+      ],
+      "id": "d3d3beca-9c50-411e-b636-fc918dcadacb",
+      "name": "add calls sent and cost incurred value",
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const result = $json['calls sent'] + 1;\nreturn { result };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1860,
+        300
+      ],
+      "id": "542cc2af-db1e-4866-b16c-ef94ddfe5244",
+      "name": "add calls sent"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const result = $('get row number').item.json['cost incurred'] + $json.body.call_cost.combined_cost;\nreturn { result };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1500,
+        300
+      ],
+      "id": "fc91f156-7924-486f-8b1a-47b4e684d94b",
+      "name": "add cost incurred"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "251a78c5-07d9-4d80-863f-ffce235e023e",
+              "leftValue": "={{ $json.message.content }}",
+              "rightValue": "future",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -360,
+        300
+      ],
+      "id": "63136158-cdf3-4682-90f2-3f0401c540e7",
+      "name": "future1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "428be8ff-1470-4c61-81be-c8743af0fb84",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -3060,
+        300
+      ],
+      "id": "e51d9aa7-73cb-41a9-84a4-62c366f78c3b",
+      "name": "Webhook",
+      "webhookId": "428be8ff-1470-4c61-81be-c8743af0fb84"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -2060,
+        20
+      ],
+      "id": "5e086148-699b-41a0-8139-c54c4c15a967",
+      "name": "Wait",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1900,
+        780
+      ],
+      "id": "ebff3e06-2e3a-47c8-8592-75f03a97e26f",
+      "name": "Wait1",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -900,
+        980
+      ],
+      "id": "131f0848-b73e-4ff1-8d65-816b256042db",
+      "name": "Wait2",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1360,
+        -380
+      ],
+      "id": "51e3c840-75ce-48a9-a008-4d90040674ec",
+      "name": "Wait3",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -880,
+        -360
+      ],
+      "id": "d0f86900-fe02-4cb7-97be-307c32ef390e",
+      "name": "Wait4",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -780,
+        740
+      ],
+      "id": "6669ac23-9450-4878-aa6e-c8de7789bfc2",
+      "name": "Wait5",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        -520
+      ],
+      "id": "51c5dc0b-fb71-4667-a5e9-e54df4b77072",
+      "name": "Wait6",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        -460
+      ],
+      "id": "1e460e56-55d6-4d46-9605-201fdd262ff7",
+      "name": "Wait7",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1380,
+        -80
+      ],
+      "id": "a281f2f2-eedc-422e-8566-901e6ed026e4",
+      "name": "Wait8",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        840,
+        260
+      ],
+      "id": "e1ce4368-fb6a-4740-bb44-bcffd47e8b52",
+      "name": "Wait9",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        580,
+        880
+      ],
+      "id": "77a67e0b-22b6-412d-a623-54839703a223",
+      "name": "Wait10",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        980,
+        880
+      ],
+      "id": "b5bd1b18-ad89-45dc-a251-e89e052f7efc",
+      "name": "Wait11",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        880
+      ],
+      "id": "bf189ff3-9300-4d16-9056-eabb24b9358d",
+      "name": "Wait12",
+      "webhookId": "e56a9b26-c684-4603-a23c-8c34168a1054"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "95854a96-33c6-4b9c-b7eb-afabfb33aa3d",
+              "leftValue": "={{ $('human or voicemail').item.json.message.content }}",
+              "rightValue": "human",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -960,
+        300
+      ],
+      "id": "5b83006a-c0d1-4b2c-8bea-dcf11f66a898",
+      "name": "human1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Given below is the transcript, of a cold call done by our AI voice agent to a cold lead referred to as the User. \n\nThe transcrit is right below:\n\n\"{{ $('Webhook').item.json.body.call.transcript }}\"\n\n\nYou have to just analyze the transcript completely, and then find out whether the one who picked up the call andd answered was a voicemail, or a human.\n\n##*NOTES:*\n- There are HUGE possibilities that the transcript or summary doesn't mention the word voicemail by mouth, and it is not there in either of them, but if the transcript is just very very short like basically of one line, or one or two words, or there are lots of lines inside the transcript, which are commonly said by the voicemails systems, or IVR systems specially, then you have to surely consider them as voicemails.\n\n- If the transcript is very short of like 1 or 2 lines overall, and the only lines inside it go similar to this: \"Thanks  for reaching out to {any company name}. Please leave a message.\", or similar common lines said by an IVR or a voicemail, then it MUST BE CONSIDERED AS A VOICEMAIL ONLY!!!\n\n\nBe very very smart, and if the final answer is that a human picked up the call, then return the word \"human\" as the answer only as it is.\n\nOtherwise, if a voicemail has picked up the call, then return only the word \"voicemail\" as the answer.\n\nNO OTHER TEXT OR ANSWER SHOULD BE GIVEN BY YOU, JUST THE WORDS \"human\" or \"voicemail\" accoring to the conditions mentioned above.\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -2620,
+        300
+      ],
+      "id": "c90233a9-f2c4-4884-a40a-ad7e59542dcc",
+      "name": "human or voicemail",
+      "credentials": {
+        "openAiApi": {
+          "id": "5xcfskuu2WudNB7x",
+          "name": "Aaroh's open ai account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Here is the transcript  of a call, in which an appointment has been  booked:\n\n\"{{ $('Webhook').item.json.body.call.transcript }}\"\n\nYou have to analyze this transcript very perfectly, and in the end give me a 3 liner summary for what happened on the call, and for what time has the user booked an appointment with the further officials with the AI Agent on the call.\n\nDO NOT FORGET TO MANDATORILY MENTION THE DATE AND TIME EXACTLY FOR WHICH THE APAPOINTMENT HAS BEEN BOOKED!\n\nNO OTHER TEXT!! JUST THE SUMMARY."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -200,
+        20
+      ],
+      "id": "f61564f7-48a4-4b72-92c9-d6d9c622df4c",
+      "name": "summary & date,time",
+      "credentials": {
+        "openAiApi": {
+          "id": "5xcfskuu2WudNB7x",
+          "name": "Aaroh's open ai account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Here is the transcript  of a call, in which an appointment has been  booked:\n\n\"{{ $('Webhook').item.json.body.call.transcript }}\"\n\nYou have to analyze this transcript very perfectly, and in the end give me a 3 liner summary for what happened on the call between the user and the AI Agent. What type of talks did they do and how did the user react.\n\nNO OTHER TEXT!! JUST THE SUMMARY."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -100,
+        300
+      ],
+      "id": "8f5adaf5-37ed-430f-aebc-92fea1bd22a4",
+      "name": "summary",
+      "credentials": {
+        "openAiApi": {
+          "id": "5xcfskuu2WudNB7x",
+          "name": "Aaroh's open ai account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Here is the transcript  of a call, in which an appointment has been  booked:\n\n\"{{ $('Webhook').item.json.body.call.transcript }}\"\n\nYou have to analyze this transcript very perfectly, and in the end give me a 3 liner summary for what happened on the call between the user and the AI Agent. What type of talks did they do and how did the user react.\n\nNO OTHER TEXT!! JUST THE SUMMARY."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -280,
+        560
+      ],
+      "id": "718c6ccd-8506-4122-bf75-5789e4568169",
+      "name": "summary1",
+      "credentials": {
+        "openAiApi": {
+          "id": "5xcfskuu2WudNB7x",
+          "name": "Aaroh's open ai account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 10000,
+        "options": {}
+      },
+      "id": "f8b08a83-6648-42ea-a4f9-435bed649a84",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1100,
+        -840
+      ],
+      "retryOnFail": false,
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "00 23 10 02 MON"
+            }
+          ]
+        }
+      },
+      "id": "3dd83094-79eb-4af1-9c68-9f6b4edf3d94",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1260,
+        -840
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -900,
+        -840
+      ],
+      "id": "13c5c80d-9874-4c87-b584-d1833d7beae0",
+      "name": "get details",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -460,
+        -840
+      ],
+      "id": "d5e9f0e3-02dd-4ed7-95ac-a107ee7b2e15",
+      "name": "delete row",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleApi": {
+          "id": "3tg5meqVyn4RwtNR",
+          "name": "Onit google service account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ",
+          "mode": "list",
+          "cachedResultName": "demo ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KI309MV6ruOf5ICOSNm1YYIW2OvUtxrarqSzbaspuUQ/edit#gid=0"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -420,
+        -520
+      ],
+      "id": "2de75c1c-09b9-4211-8c6d-ce51c3cf94a8",
+      "name": "delete row2",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleApi": {
+          "id": "mz7EM1ZkslDOP6Xb",
+          "name": "aisendora_service-acc"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -180,
+        -840
+      ],
+      "id": "c4f9f1cc-7cdd-4dad-ae01-ca765e0f8ada",
+      "name": "Wait13",
+      "webhookId": "3508cf07-a1d7-4687-9a3a-614b9d9ec44b",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.retellai.com/v2/get-call/{{ $('Webhook').item.json.body.call.call_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer key_f3c8d7297ada90b3c432938463dc"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1680,
+        300
+      ],
+      "id": "e21ced77-b621-4fbb-a411-fbd8837d0587",
+      "name": "Get call details"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dev.sendora.ai/webhook/real-time-leads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <Your API Token>"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"from_number\": \"<from_number>\",\n  \"to_number\": \"<to_number>\",\n  \"override_agent_id\": \"oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD\",\n  \"override_agent_version\": 1,\n  \"metadata\": {},\n  \"retell_llm_dynamic_variables\": {\n    \"Company Name\": \"<company_name>\"\n  }\n}",
+        "options": {}
+      },
+      "id": "25df2021-a71d-4bb4-a670-033d43bad443",
+      "name": "Send the call (http request)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -680,
+        -840
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "call status: ended": {
+      "main": [
+        [
+          {
+            "node": "human or voicemail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "find interest": {
+      "main": [
+        [
+          {
+            "node": "booked app",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "future1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "rejected",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "booked app": {
+      "main": [
+        [
+          {
+            "node": "summary & date,time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "human",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "voicemail",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "human1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "rejected": {
+      "main": [
+        [
+          {
+            "node": "summary1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "booked": {
+      "main": [
+        [
+          {
+            "node": "get row number3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reason for rejection": {
+      "main": [
+        [
+          {
+            "node": "rejected offer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get row number": {
+      "main": [
+        [
+          {
+            "node": "add calls sent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get row number1": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "add humans calls picked value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "human": {
+      "main": [
+        [
+          {
+            "node": "get row number1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get row number2": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "add voicemails value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "voicemail": {
+      "main": [
+        [
+          {
+            "node": "get row number2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get row number3": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "update appointments booked value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get row number4": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "add rejected offer value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "rejected offer": {
+      "main": [
+        [
+          {
+            "node": "get row number4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add calls sent and cost incurred value": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add calls sent": {
+      "main": [
+        [
+          {
+            "node": "Get call details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add cost incurred": {
+      "main": [
+        [
+          {
+            "node": "add calls sent and cost incurred value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "future1": {
+      "main": [
+        [
+          {
+            "node": "summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "future": {
+      "main": [
+        [
+          {
+            "node": "get row number3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add voicemails value": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "call status: ended",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "get row number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "get row number2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "add voicemails value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "get row number1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add humans calls picked value": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "add humans calls picked value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait5": {
+      "main": [
+        [
+          {
+            "node": "add calls sent and cost incurred value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait6": {
+      "main": [
+        [
+          {
+            "node": "booked",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait7": {
+      "main": [
+        [
+          {
+            "node": "get row number3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update appointments booked value": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait8": {
+      "main": [
+        [
+          {
+            "node": "update appointments booked value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait9": {
+      "main": [
+        [
+          {
+            "node": "future",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait10": {
+      "main": [
+        [
+          {
+            "node": "rejected offer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait11": {
+      "main": [
+        [
+          {
+            "node": "get row number4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add rejected offer value": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait12": {
+      "main": [
+        [
+          {
+            "node": "add rejected offer value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "human1": {
+      "main": [
+        [
+          {
+            "node": "find interest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "human or voicemail": {
+      "main": [
+        [
+          {
+            "node": "get row number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "summary & date,time": {
+      "main": [
+        [
+          {
+            "node": "booked",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "summary": {
+      "main": [
+        [
+          {
+            "node": "future",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "summary1": {
+      "main": [
+        [
+          {
+            "node": "reason for rejection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "get details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get details": {
+      "main": [
+        [
+          {
+            "node": "Send the call (http request)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "delete row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "delete row": {
+      "main": [
+        [
+          {
+            "node": "Wait13",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "delete row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "delete row2": {
+      "main": [
+        [
+          {
+            "node": "Wait13",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "delete row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait13": {
+      "main": [
+        [
+          {
+            "node": "get details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get call details": {
+      "main": [
+        [
+          {
+            "node": "add cost incurred",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send the call (http request)": {
+      "main": [
+        [
+          {
+            "node": "delete row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "delete row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "216edde8-8fd7-41b4-91dd-ac5b4e8fad67",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1f9b134c3525ad50a35177621a05ade8c403caae1fa8ec11e75753428fe762ed"
+  },
+  "id": "pi5LVe9EkGoJLRO3",
+  "tags": []
+}

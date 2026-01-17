@@ -1,0 +1,1243 @@
+{
+  "name": "SEO AUTOMATION - BOOSCs",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        11600
+      ],
+      "id": "903f6795-0206-4d40-a8d6-4bbd5fb69601",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1o2LKYbcHLVY07Y2YtEpeAOs6-Bk5576DzWg6SVObOoU",
+          "mode": "list",
+          "cachedResultName": "Content Planner",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1o2LKYbcHLVY07Y2YtEpeAOs6-Bk5576DzWg6SVObOoU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1o2LKYbcHLVY07Y2YtEpeAOs6-Bk5576DzWg6SVObOoU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Primary Keyword": "={{ $('Post plan').all().map(item => item.json[\"Primary Keyword\"]).join('\\n') }}",
+            "Completed": "Yes"
+          },
+          "matchingColumns": [
+            "Primary Keyword"
+          ],
+          "schema": [
+            {
+              "id": "Cluster",
+              "displayName": "Cluster",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Intent",
+              "displayName": "Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Keywords",
+              "displayName": "Keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Primary Keyword",
+              "displayName": "Primary Keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Completed",
+              "displayName": "Completed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        8720,
+        11020
+      ],
+      "id": "82f6090f-19bd-44ea-a178-f1bae00b6a2c",
+      "name": "Check as completed on Sheets1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1QH0ul2nQN6IFyHpoTnpIu7EsW8VjuG3qrTPgRscGVbI",
+          "mode": "list",
+          "cachedResultName": "posted content already",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QH0ul2nQN6IFyHpoTnpIu7EsW8VjuG3qrTPgRscGVbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QH0ul2nQN6IFyHpoTnpIu7EsW8VjuG3qrTPgRscGVbI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Title": "={{ $('TITLE Generator').all().map(item => item.json.output).join('\\n')}}",
+            "Keyword": "={{ $('Post plan').all().map(item => item.json.Keywords).join('\\n') }}\n",
+            "Summary": "={{ $('META TAGS Generator').all().map(item => item.json.output).join('\\n') }}\n",
+            "URL": "=https://webinnoventix.com/{{ $('SLUG Generator').all().map(item => item.json.output).join('\\n') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Keyword",
+              "displayName": "Keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        8920,
+        11020
+      ],
+      "id": "e310a5aa-245d-4475-9362-87fe34b8a73c",
+      "name": "Google Sheets1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are part of a team that creates world class blog posts. \n\nFor each new blog post project, you are provided with a list of keywords and search intent. \n\n- Keywords: The keywords are to what the blog post is meant to rank for. They are scattered throughout the blog and define the topic of the blog post. \n\n- Search intent: The search intent recognises the intent of the user when searching up the keyword which defines be the theme of the blog post, so they click on our blog to satisfy their search. \n\n- Primary keyword: Out of the keywords, there is one keyword known as the primary keyword. The primary keyword will go in the title and first few sentences. It is important that the topic of the blog post is related to the primary keyword so that you can place it into the title and introduction naturally. \n\nGiven a list of keywords and search intent, your job is to understand the goal of th e blog post, identify the thought process behind the flow of the blog post and come up with a preliminary plan for the post. \n\nYour output must: \n\n- Recognise the discussion points of the blog post.\n\n- Be in dot point format.\n\nYou must ensure that the plan created satisfies the search intent and revolves directly around the given keywords. \n\nWhen making the plan keep in mind that all keywords must be used in the final blog post. \n\nThe final goal of the project is to create a high quality, high value, highly relevant blog post that will satisfy the users search intent and give them everything they need to know about the topic. \n\nA new project just came across your desk with below keywords and search intent:\n\nKeywords: \n{{ $json.Keywords }}\n\nSearch intent: \n{{ $json.Intent }}\n\nPrimary keyword: \n{{ $json['Primary Keyword'] }}\n\nCreate the preliminary plan.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        980,
+        11300
+      ],
+      "id": "33e73a94-00f7-4ab0-884a-0d97275ac1d0",
+      "name": "Planner Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Act as an assistant for a news researcher who is capable of finding detailed summaries about a news topic from highly reputable sources.\n\nSo your duty is to just give the questions. \n\nPreliminary plan:\n{{ $json.output }}\n\n\nKeywords: \n{{ $('Post plan').item.json.Keywords }}\n\nPrimary Keyword: {{ $('Post plan').item.json.Keywords }}\n\nIntent: {{ $('Post plan').item.json.Intent }}\n\n\nNOTE: I don't want something like this in output: Okay, based on the plan and keywords, here are some questions to guide my research:\\n\\nquestions: or something like that Just only give me what I asked for. I just need the questions and nothing else in the output.",
+        "options": {
+          "systemMessage": "output format: \n\n []"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        1320,
+        11300
+      ],
+      "id": "ec882203-19e9-43dd-a657-9342cad3f5ab",
+      "name": "Research Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are part of a team that creates world class blog posts. \n\nFor each new blog post project, you are provided with a list of keywords, a primary keyword, search intent, research findings and a preliminary blog post plan. Here's a definition of each of the inputs: \n\n- Keywords: These are the keywordswhich the blog post is meant to rank for on SEO. They should be scattered throughout the blog post intelligently to help with SEO. \n\n- Search intent: The search intent recognises the intent of the user when searching up the keyword. Our goal is to optimise the blog post to be highly relevant and valuable to the user, as such the search intent should be satisfied within the blog post. \n\n- Research findings: This is research found from very reputable resources in relation to the blog post. You must intelligently use this research to make your blog post more reputable. \n\n- Preliminary plan: Very basic plan set out by your colleague to kick off the blog post. \n\n- Primary keyword: Out of the keywords, there is one keyword known as the primary keyword. The primary keyword is the keyword which has the highest SEO importance and as such must go in the title and first few sentences of the blog post. It is important that the blog post is highly relevant to the primary keyword, so that it could be placed naturally into the title and introduction sections. \n\n\nGiven the said info, you must create a detailed plan for the blog post. \n \nYour output must: \n\n- Include a plan for the blog post.\n\n- Be in dot point format. \n\n- In each part of the blog post, you must mention which keywords should be placed. \n\nHere are the other things you must consider: \n\n- All keywords must be placed inside the blog post. For each section, mention which keywords to include. The keyword placement must feel natural and must make sense. \n\n- You must include all research points in the blog post. When including the research points, make sure to also include their source URL so that the copywriter can use them as hyperlinks. \n\n- You must ensure that the plan created satisfies the search intent and revolves directly around the given keywords. \n\n- Your plan must be very detailed. \n\n- Keep in mind the copywriter that will use your plan to write the blog post is not an expert in the topic of the blog post. So you should give them all the detail required so they can just turn it into nicely formatted paragraphs. So your plan should include all technical detail regarding each point to be in the blog post. For example instead of saying \"define X\", you must have \"define X as ...\". \n\n- The plan you create must have a flow that makes sense. \n\n- You must ensure the bog post will be highly detailed and satisfy the most important concepts regarding the topic. \n\nA new project has just came across your desk with below details:\n\nKeywords: \n{{ $('Post plan').first().json.Keywords }}\n\nSearch intent: \n{{ $('Post plan').all().map(item => item.json.Intent).join('\\n') }}\n\nPreliminary plan: \n{{ $('Planner Agent').all().map(item => item.json.output).join('\\n') }}\n\n\nResearch findings:  (only use if that is a useful or relatable find)\n{{ $json.resultsArray }}\n\n\n\nPrimary keyword: \n{{ $('Post plan').all().map(item => item.json[\"Primary Keyword\"]).join('\\n') }}\n\n\nCreate the detailed plan. \n\nYour output must only be the plan and nothing else. \n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        2280,
+        11080
+      ],
+      "id": "4f95021a-ca9d-4c0d-a34c-a97911556d4b",
+      "name": "Detailed Plan"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are part of a team that creates world class blog posts. \n\nYou are the teams best copywriter and are responsible for writing out the actual blog post. \n\nFor each new blog post project you are provided with a detailed plan and research findings. \n\nYour job is to create the blog post by closely following the detailed plan. \n\nThe blog post you create must: \n\n- Follow the plan bit by bit. \n\n  - Use short paragraphs. \n\n- Use bullet points and subheadings with keywords where appropriate.  \n\n- Not have any fluff. The content of the blog must be value dense and direct. \n\n- Be very detailed. \n\n- Include the keywords mentioned in each section within that section. \n\n- Use the research as advised by the plan. Make sure to include the link associated with each point you extract from the research at the end of that section in the form of a URL.  \n\n- Place the primary keyword in the blog title, H1 header and early in the introduction. \n\n- Place one keyword for each section in the heading of that section. \n\n-  When possible pepper synonyms of the keywords throughout each section. \n\n- When possible use Latent Semantic Indexing (LSI) keywords and related terms to enhance context (e.g., “robotic process automation” for RPA). \n\n- Be at minimum 2000 to 2500 words long. \n\n- Be suitable for a year 5 reading level. \n\n- Important note: The first para should be within 160 characters because that is  going ot be post excerpt and then you can start with the heading and other stuff. Just give a overview or something as a post excerpt as the first paragraph.\n\nMake sure to create the entire blog post draft in your first output. Don't stop or cut it short. \n\nHere are the details of your next blog post project: \n\nDetailed Plan: \n{{ $('Detailed Plan').all().map(item => item.json.output).join('\\n')  }}\n\nDetailed Research: \n{{ $('Research Agent').all().map(item => item.json.output).join('\\n') }}\n\n(On Web Search performed For External Citations)\n{{ $('Code4').item.json.resultsArray }}\n\n\nWrite the blog post.\n\nNOTE: Don't Give something like: \"Okay, here is the blog post draft, following the plan and incorporating the research details:\" or something like that. Only give me the blog post draft.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        2660,
+        11080
+      ],
+      "id": "b6018cdf-fdc6-4022-a1fc-025ec8dcb62a",
+      "name": "Blog Writer Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2820,
+        11380
+      ],
+      "id": "7b253240-2ae2-4a4f-8adc-9f24421da3d4",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cc2IiPWbF6EY9uGt",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are part of a team that creates world class blog posts. \n\nYou are in charge of internal linking between blog posts. \n\nFor each new blog post that comes across your desk, your job is to look through previously posted blogs and make atleast 5 internal links. \n\nTo choose the best internal linking opportunities you must: \n\n- Read the previous blog post summaries and look through their keywords. If there is a match where the previous blog post is highly relevant, then this is an internal linking opportunity. \n\n- Do not link if it is not highly relevant. Only make a link if it makes sense and adds value for the reader. \n\nOnce you've found the best linking opportunities, you must update the blog post with the internal links. To do this you must: \n\n- Add the link of the previous blog post at the relevant section of the new blog post. Drop the URL at the place which makes most sense. Later we will hyperlink the URL to the word in the blog post which it is placed next to. So your placing is very important. \n\nMake sure to not delete any existing URLs or change anything about the blog post provided to you. You must only add new internal linking URLs and output the revised blog post. \n\nYour output must be the blog post given to you plus the new urls. Don't remove any info. \n\nDon't return the previous blog posts. Only return the current blog post with the internal links added.\n\nCurrent blog Post: \n{{ $('Merge').all().map(item => item.json.output).join('\\n') }}\n\n\nPrevious Blog Posts: \n{{ $json.data.toJsonString().split() }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        5980,
+        11020
+      ],
+      "id": "9889ae70-afe8-4130-8603-7cf16154869f",
+      "name": "Internal Citations"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You're an expert at writing SEO-optimized blog post structures in HTML.\n\nI need you to create the body content only (no <html>, <head>, or <body> tags) for a generic blog post page.\n\nThis structure will be sent to WordPress via API, so make sure the output is:\n\n✅ Clean and modular HTML\n✅ Semantic tags (like <article>, <section>, <h2>, <p>, <ul>, etc.)\n✅ No h1 tag in the blog. You should use h2 blog as the higher type. \n✅ Proper heading hierarchy: <h2> for main sections, <h3> for sub-sections\n✅ Need break tag after one section and before another section h2\n✅ Section for:\n\nBlog content (intro, sections, sub-sections, conclusion)\n\nRelated posts at the end (as links inside a <section>)\n\n❌ Don’t include <html>, <head>, meta tags, CSS, or JS\n❌ Don’t wrap with <body> tag\n\nAlso I need a tags for links with a preview text example: Click here to see this with a link instead of leaving the link individually.\n\nAlso leave space below every module like when there is next module like: before another h2 or h3 and should not want spaces below the h2 and h3 which can sound like the h3 is not connected with the below paragraph.\n\nAnd also the first sentence should be below 300 words, and the first 250 characters are the excerpt so make sure to align that properly. also after that sentence I need a subheading or seomthing to increase consistency.\n\nShould need multiple h2 and h3 tags (wherever it is necessary. We are doing for structural google crawling so give me based on that.)\n\nThis will be reused for multiple blogs, so keep it generic but structured for SEO.\n\nBlog post: \n\n{{ $json.output }}\n\nHere's an example of a well formatted output: (should Do only like this.) DO THE SAME LIKE THIS\n\n<article>\n  <section>\n    <p>\n      <b>Artificial Intelligence (AI)</b> isn’t just for big tech companies anymore.\n      Small businesses are using AI tools to level the playing field and connect with their audience like never before.\n    </p>\n  </section>\n\n  <section>\n    <h2>What is AI in Marketing?</h2>\n    <p>\n      AI in marketing refers to the use of machine learning algorithms and data analysis to automate tasks, personalize experiences, and make smarter decisions.\n    </p>\n    <br> \n    <h2>Ways Small Businesses are Using AI</h2>\n    \n    <h3>1. Personalized Email Campaigns</h3>\n    <p>\n      AI helps analyze customer behavior to send highly targeted and personalized email content, improving open and click-through rates.\n    </p>\n\n    <h3>2. Chatbots for Customer Support</h3>\n    <p>\n      Many small businesses are using AI-powered chatbots to offer 24/7 customer support, without hiring a huge team.\n    </p>\n\n    <h3>3. Predictive Analytics</h3>\n    <p>\n      Tools like Google Analytics and HubSpot use AI to predict customer behavior, helping businesses plan their marketing strategy accordingly.\n    </p>\n\n    <h3>4. AI-Generated Content</h3>\n    <p>\n      From social media captions to blog outlines, AI writing tools can save small teams hours of work every week.\n    </p>\n  </section>\n\n  <!-- Conclusion -->\n  <section>\n    <h2>Conclusion</h2>\n    <p>\n      AI isn't the future – it's the present. Small businesses that embrace AI now will not only save time and money, but also gain a competitive edge in their marketing efforts.\n    </p>\n  </section>\n\n  <!-- Related Posts -->\n  <section>\n    <h2>Related Posts</h2>\n    <ul>\n      <li><a href=\"/blog/5-ai-tools-every-startup-needs\">5 AI Tools Every Startup Needs</a></li>\n      <li><a href=\"/blog/marketing-trends-2025\">Top Marketing Trends to Watch in 2025</a></li>\n      <li><a href=\"/blog/why-small-businesses-should-invest-in-tech\">Why Small Businesses Should Invest in Tech</a></li>\n    </ul>\n  </section>\n</article>\n\n\nNote: DO NOT OUTPUT ANYTHING OTHER THAN THE This. (Important)",
+        "options": {
+          "systemMessage": "Don't change the blog content, just convert it with the tags."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        6320,
+        11020
+      ],
+      "id": "f1e64bc9-6bbf-4061-a202-d9867a86afe2",
+      "name": "HTML Converter"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create a slug for the following blog post: \n{{ $('Internal Citations').item.json.output }}\n\nA slug in a blog post is the part of the URL that comes after the domain name and identifies a specific page. It is typically a short, descriptive phrase that summarizes the content of the post, making it easier for users and search engines to understand what the page is about. For example, in the URL www.example.com/intelligent-agents, the slug is intelligent-agents. A good slug is concise, contains relevant keywords, and avoids unnecessary words to improve readability and SEO. \n\nThe slug must be 4 or 5 words max and must include the primary keyword of the blog post which is {{ $('Post plan').all().map(item => item.json[\"Primary Keyword\"]).join('\\n') }}.\n\n\nYour output must be the slug and nothing else so that I can copy and paste your output and put it at the end of my blog post URL to post it right away. ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        6840,
+        11020
+      ],
+      "id": "f1a27430-0abd-4ec4-8b6d-7a0abd83bcf1",
+      "name": "SLUG Generator"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\nExtract the blog post title from the following blog post: \n{{ $('Internal Citations').item.json.output }}\n\n\nThe blog post title must include the primary keyword ({{ $('Post plan').all().map(item => item.json[\"Primary Keyword\"]).join('\\n') }})\n and must inform the users right away of what they can expect from reading the blog post. \n\n- Don't put the output in \"\". The output should just text with no markdown or formatting. \n\nYour output must only be the blog post title and nothing else. ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        7200,
+        11020
+      ],
+      "id": "e30ab0c3-edea-47d0-8c60-3cb91ea16d6e",
+      "name": "TITLE Generator"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create a good meta description for the following blog post: \n{{ $('Internal Citations').item.json.output }}\n\n\nA good meta description for a blog post that is SEO-optimized should:\n- Be Concise: Stick to 150-160 characters to ensure the full description displays in search results. \n- Include Keywords: Incorporate primary keywords naturally to improve visibility and relevance to search queries.\n\nPrimary keyword = {{ $('Post plan').all().map(item => item.json[\"Primary Keyword\"]).join('\\n') }}\n\n\nMore keywords to include if possible = [{{ $('Post plan').all().map(item => item.json[\"Keywords\"]).join('\\n') }}]\n\n- Provide Value: Clearly describe what the reader will learn or gain by clicking the link. \n\n- Be Engaging: Use persuasive language, such as action verbs or a question, to encourage clicks. \n\n- Align with Content: Ensure the description accurately reflects the blog post to meet user expectations and reduce bounce rates. \n\nYour output must only be the meta description and nothing else. \n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        7580,
+        11020
+      ],
+      "id": "3ebd33cc-e1ef-41d6-b83a-7f6cb610a24f",
+      "name": "META TAGS Generator"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        6840,
+        11340
+      ],
+      "id": "5bc1e969-f57b-45b5-ab8e-5210b10737cc",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cc2IiPWbF6EY9uGt",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\nYou are an expert Generative Engine Optimization (GEO) specialist. Your task is to take the provided blog post and optimize it to increase its visibility and likelihood of being cited by AI-powered search engines like ChatGPT, Gemini, Grok, Claude, and others. Consider the following GEO principles during the optimization \n\nGoal: Revise the provided blog post draft to be highly optimized for understanding, summarization, referencing, and suggestion by Generative AI models (like Gemini, GPT).\n\nInput Data:\n{{ $json.output }}\n\nprocess:\n•\nGenerative AI Research: Understand that AI engines prioritize content based on user intent and their training data. While you don't have direct access to this data, infer potential AI preferences by focusing on clarity, authoritativeness, and direct answers.\n•\nHigh-Quality, Authoritative Content: Ensure the optimized blog post is clear, accurate, and provides substantial value to the reader. Strengthen the content by adding or suggesting the inclusion of relevant statistics, expert quotes (even if placeholder suggestions), and links to credible sources where appropriate. Ensure the language is plain and avoids unnecessary jargon. Focus on answering the 'why' and 'how' in addition to the 'what'.\n•\nContent Structure for AI: Format the blog post to be easily understood and parsed by AI algorithms. This includes:\n◦\nUsing clear and descriptive headings (H2s, H3s, etc.) to organize the content logically.\n◦\nEmploying bullet points and numbered lists to highlight key information and provide concise summaries.\n◦\nKeeping paragraphs and sentences relatively short and focused.\n◦\nPlacing key answers or information early in the content to address potential AI queries directly.\n◦\nSuggesting the potential use of structured data/schema markup (especially FAQ schema if applicable) to enhance AI understanding of the content's purpose and key information.\n•\nStrategic Content Distribution (Considerations for the User): While you cannot directly distribute the content, suggest strategies the user should consider, such as sharing on relevant social media platforms, engaging in Q&A communities like Reddit and Quora, and publishing on industry-specific data hubs.\n•\nBuilding Brand Authority (Considerations for the User): Advise the user on the importance of consistent messaging, a positive online and offline reputation, and ethical link-building practices to enhance their overall authority, which can positively influence AI citations.\n•\nLeveraging Technical SEO (Ensure the Existing Blog Post is Accessible): Assume the provided blog post is already technically sound (fast loading, mobile-friendly, crawlable). If there are obvious structural elements that hinder readability for both humans and AI (e.g., extremely long paragraphs without headings), suggest improvements.\nAvoid the following mistakes:\n•\nKeyword Stuffing: Focus on natural language and semantic relevance rather than excessive keyword repetition.\n•\nCreating Shallow Content: Ensure the optimized post offers in-depth information and valuable insights.\n•\nPoor Content Structure: Rectify any structural issues that would make it difficult for AI to understand the content.\n•\nMissing Authority Signals: Actively look for opportunities to add or suggest the addition of sources and expert backing.\nThe goal is to transform the provided normal blog post into a highly readable, authoritative, and well-structured resource that AI engines are more likely to cite as a valuable answer to user queries. Provide the GEO-optimized version of the blog post.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        3040,
+        11080
+      ],
+      "id": "d56f4de6-8e18-4f3e-8aba-8d1a67f53e74",
+      "name": "GEO Analyst"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Role: Brand Integration Specialist for Web Innoventix\n\nGoal: Review the provided blog post and strategically integrate elements of the Web Innoventix brand, including its services, brand thinking, and focus on B2B solutions, in a natural and value-adding way.\n\nInput Data:\n{{ $json.output }} (The GEO-optimized blog post)\n\nBrand Information:\n\nBrand Name: Web Innoventix\nCompany Type: Web Development Company\ndomain: https://webinnoventix.com\nTarget Audience: B2B Companies\nCore Services:\nWeb Development (optimised for sales)\nWeb or UI/UX Design (CRO Optimised)\nBranding & Brand Strategy (psychology based)\nBrand Starter Pack (complete pack from logo to UI/UX design to brand strategy and identity to a complete web development)\nBrand Thinking/Goals (Implicit): Focus on innovation, effective web solutions that drive business results (sales, conversions), strategic branding based on psychology, and providing comprehensive solutions for businesses.\nTasks:\n\nIdentify Natural Brand Mentions: Scan the blog post for opportunities to naturally mention \"Web Innoventix\" as the source of expertise or the provider of relevant services. Prioritize instances where it adds credibility or context to the information being presented.\n\nIntegrate Service Mentions (Where Relevant): Look for sections in the blog post where mentioning Web Innoventix's services would be relevant and helpful to the reader. For example, if the post discusses website design for conversions, you could subtly weave in \"At Web Innoventix, we specialize in CRO-optimised UI/UX design.\" Ensure these mentions feel organic and not like blatant advertising.\nInfuse Brand Thinking: Where appropriate, subtly inject the Web Innoventix perspective or approach. For example, if the post discusses the importance of branding, you could add a sentence like, \"At Web Innoventix, our branding and brand strategy are rooted in psychological principles to ensure a strong connection with your target audience.\"\n\nHighlight B2B Focus: Ensure the language and examples used in the blog post resonate with a B2B audience. If the post discusses challenges or solutions, frame them from a B2B perspective. You can occasionally and naturally mention Web Innoventix's focus on helping B2B companies achieve their goals through their services.\n\nMaintain Natural Tone: Ensure all brand integrations feel natural and don't disrupt the flow or readability of the post. Avoid overly promotional language. The goal is to subtly establish Web Innoventix as a knowledgeable and reliable source.\n\nConsider the \"Why\": Think about why Web Innoventix is sharing this information. What are their goals in providing this content? Ensure the brand integration aligns with these underlying objectives (e.g., establishing thought leadership, attracting potential clients).\n\nOutput Format: Provide the fully branded blog post, with strategic integrations of Web Innoventix's name, services, and brand thinking. \n\nExample Integration Ideas:\nIf the post is about website speed optimization, the agent might add: \"Web Innoventix prioritizes website performance in all our web development projects, ensuring optimal loading times for improved user experience and SEO.\"\n\nIf the post discusses the importance of a strong brand identity, the agent might add: \"For B2B companies looking to establish a powerful brand, Web Innoventix offers a comprehensive Brand Starter Pack that covers everything from logo design to a complete web development strategy.\"\n\nIn a conclusion discussing future trends, the agent might add: \"As a forward-thinking web development company, Web Innoventix stays ahead of the curve to provide our B2B clients with innovative and effective web solutions.\"\n\n\nNow give me output.\n\nNOTE: Don't Give something like: \"Okay, here is the blog post draft, following the plan and incorporating the research details:\" or something like that. Only give me the edited blog post.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        3400,
+        11080
+      ],
+      "id": "998eb494-8460-4414-b0d9-491617b1c35a",
+      "name": "Brand Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Role: Content Humanizer\n\nGoal: Transform the provided blog post into a piece of content that is engaging, easy to understand, emotionally resonant (where appropriate), and sounds authentically human, avoiding any robotic or overly formal language.\n\nInput Data:\n{{ $json.output }} (The brand-integrated blog post)\n\nTasks:\n\nEnhance Human Readability: Review the blog post and identify any complex sentences, jargon, or overly formal language. Simplify these sections to make them more accessible and engaging for a general human audience. Aim for a natural, conversational flow.\nLower English Grade Level: Analyze the reading level of the text and make adjustments to bring it down to a more easily digestible level (consider aiming for around a Grade 7-9 level, but adjust based on your target audience). This involves simplifying vocabulary and sentence structure.\nEliminate \"Botish\" Tone: Identify and replace any phrases or sentence structures that sound artificial, repetitive, or generated by an AI. Focus on using varied vocabulary and natural-sounding transitions.\nInject Appropriate Emotions (Subtly): Where relevant to the topic, subtly weave in human emotions like empathy, excitement, curiosity, or concern. Ensure these emotions feel genuine and enhance the connection with the reader, without becoming overly sentimental or forced. Avoid being cringe or overly enthusiastic.\nEnsure Authentic Human Voice: Read through the entire blog post and ensure it sounds like it was written by a real person. This involves using contractions, occasional colloquialisms (if appropriate for your brand voice), and a generally relatable tone.\nBreak Up Monotony: Look for opportunities to break up long paragraphs or sections of text to improve readability and visual appeal. This could involve adding rhetorical questions, short interjections, or varying sentence length.\nFocus on Engagement: Consider what would make a human reader truly connect with the content. Are there opportunities to add relatable anecdotes, ask thought-provoking questions, or use more evocative language? Implement these changes where appropriate.\nReview for Natural Flow: After making the changes, read the blog post aloud to ensure it flows naturally and sounds like a human speaking or writing in a relaxed yet informative manner.\nOutput Format: Provide the fully humanized blog post, with all the necessary edits to make it sound more like it was written by a real person. \n\nNOTE: Don't Cut short or remove any sentence from the blog. Just Humanizze them\n\nExample Transformation Ideas (To guide the agent):\n\nOriginal: \"The utilization of advanced algorithms is paramount for achieving optimal search engine rankings.\"\n\nHumanized: \"Using smart algorithms is really important if you want your website to show up higher in search results.\"\n\nOriginal: \"Furthermore, it is imperative to consider the ramifications of neglecting user experience.\"\n\nHumanized: \"Plus, you really need to think about what it's like for people using your website.\"\n\nOriginal (Potentially Botish): \"This comprehensive guide will provide you with all the information you require.\"\n\nHumanized: \"This guide will give you everything you need to know.\"\n\nNOTE: Don't Give something like: \"Okay, here is the blog post draft, following the plan and incorporating the research details:\" or something like that. Only give me the edited blog post.\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        3760,
+        11080
+      ],
+      "id": "a7dbb2e6-a5f0-46ca-8caf-0f7608731f4e",
+      "name": "Humanizer"
+    },
+    {
+      "parameters": {
+        "url": "=https://serpapi.com/search.json?q={{$json.output}}&api_key=eddcf2754edf65cc6a4bdf88ae00d6d4e9ce2baeb6b99114943fcbfd3e36848a",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 5
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        11300
+      ],
+      "id": "33f170d5-0c4e-4826-94ef-f1d297934cc0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst splitItems = items.flatMap((item) => {\n  const output = item?.json?.output;\n  return output.split(\",\").map((value) => ({ json: { output: value } }));\n});\nreturn splitItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1660,
+        11300
+      ],
+      "id": "a779278a-e44a-48c0-b033-e8e42bd4dd6e",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Initialize an empty array to store the final flattened results\nconst allOrganicResults = [];\n\n// Loop through each item output by the HTTP Request node\n// Each 'item' represents the result of one API call\nfor (const item of $input.all()) {\n\n  // Check if the 'organic_results' key exists in the current item's JSON,\n  // is an array, and is not empty.\n  if (item.json.organic_results && Array.isArray(item.json.organic_results) && item.json.organic_results.length > 0) {\n\n    // Loop through each organic result within the current item\n    for (const organicResult of item.json.organic_results) {\n\n      // Create a new object containing only the desired fields\n      // Use || null as a safety check in case a field is missing\n      const extractedResult = {\n        title: organicResult.title || null,\n        link: organicResult.link || null, // Use the 'link' field\n        snippet: organicResult.snippet || null\n      };\n\n      // Add this new object to our final results array\n      allOrganicResults.push(extractedResult);\n    }\n  }\n  // If organic_results doesn't exist or is empty for an item, we just skip it.\n}\n\n// Return the final flattened array.\n// n8n expects an array of items, where each item has a 'json' property.\n// To output our flat list as the primary data, we wrap it like this:\nreturn allOrganicResults.map(result => ({ json: result }));\n\n// If you have only one input item and want to return the array directly\n// (less common but sometimes works depending on workflow):\n// return allOrganicResults;\n// However, the [{ json: ... }] format is the standard and safer way."
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2060,
+        11300
+      ],
+      "id": "c224367a-7e84-42a1-adfb-d27d9807c57b",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "18RKeW1kyHa4Yryw_4zw_wvVNJbVLKNVX8wbeNBFumMs",
+          "mode": "list",
+          "cachedResultName": "Content Planner",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18RKeW1kyHa4Yryw_4zw_wvVNJbVLKNVX8wbeNBFumMs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 829992885,
+          "mode": "list",
+          "cachedResultName": "Content Planner - Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18RKeW1kyHa4Yryw_4zw_wvVNJbVLKNVX8wbeNBFumMs/edit#gid=829992885"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Completed",
+              "lookupValue": "No"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        800,
+        11300
+      ],
+      "id": "45ebc2be-1bb0-42aa-9762-49f5f6553a10",
+      "name": "Post plan",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kdIqQxIsnL4YajxX",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "title": "={{ $('TITLE Generator').item.json.output }}",
+        "additionalFields": {
+          "content": "={{ $('Code5').item.json.cleanedHtml }}",
+          "slug": "={{ $('SLUG Generator').item.json.output }}",
+          "status": "draft",
+          "categories": "={{ $json.categories }}",
+          "tags": "={{ $json.tags }}"
+        }
+      },
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        8520,
+        11020
+      ],
+      "id": "981bd4d5-644b-48b7-957b-9e7d8f5e8e82",
+      "name": "Wordpress1",
+      "credentials": {
+        "wordpressApi": {
+          "id": "tHusB8NRzNJD9a3e",
+          "name": "Wordpress account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1vvr96cif8tTi7Da6Ol_Y5TCTi8VSryuoHhyeqtovWBw",
+          "mode": "list",
+          "cachedResultName": "posted content already",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vvr96cif8tTi7Da6Ol_Y5TCTi8VSryuoHhyeqtovWBw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vvr96cif8tTi7Da6Ol_Y5TCTi8VSryuoHhyeqtovWBw/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        5560,
+        11200
+      ],
+      "id": "c00e1441-9bf3-4369-934b-751754b9016f",
+      "name": "All Posts",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kdIqQxIsnL4YajxX",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        5740,
+        11200
+      ],
+      "id": "74b994c1-f3eb-4c2f-9c37-c9287302d7de",
+      "name": "combiner"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "065a645b-6d76-4184-9622-7d6f095169f1",
+              "leftValue": "={{ $json.content[\"Proceed to Next Step\"] }}",
+              "rightValue": "No",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5100,
+        10840
+      ],
+      "id": "facc39d7-f063-4e7a-9824-65af060d255c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Role: Quality Control Analyst & Process Gatekeeper\n\nGoal: Review the final blog post to ensure it meets the expected quality standards and that each preceding agent (Blog Writer, GEO Analyst, Brand Agent, and Humanizer) has effectively fulfilled their responsibilities. Provide a rating for each agent's performance, offer specific criticisms where necessary, and determine whether the blog post is ready to proceed to the next step based on the assigned ratings.\n\nInput Data:\n(The fully processed blog post)\n{{ $json.output }}\n\nEvaluation Criteria:\n\n(Same as the previous QC Agent prompt)\n\nTasks:\n\nThorough Review: Read the entire blog post carefully, keeping the goals of each preceding agent in mind.\nAgent Performance Assessment: For each agent, evaluate how well they have achieved their stated goals based on the evaluation criteria provided above.\nAssign Ratings: Provide a numerical rating (on a scale of 1 to 10, where 10 is excellent and 1 is poor) for the performance of each agent:\nBlog Writer: [Rating]\nGEO Analyst: [Rating]\nBrand Agent: [Rating]\nHumanizer: [Rating]\nProvide Specific Criticisms: If any agent's performance is rated below an 8 (or any threshold you deem appropriate), provide specific and constructive criticism. Clearly state what aspects of their work were not satisfactory and why.\nOverall Quality Assessment: Provide a brief overall assessment of the final blog post, highlighting its strengths and weaknesses.\nDecision on Next Step: Based on the individual agent ratings, determine whether to proceed to the next step or iterate the process.\nIf any agent receives a rating below 7, the decision should be \"No\" (indicating the need for iteration).\nIf all agents receive a rating of 7 or above, the decision should be \"Yes\" (indicating it's ready to proceed).\nOutput Format:\n\nAgent Performance Ratings:\n\nBlog Writer: [Rating]/10\nGEO Analyst: [Rating]/10\nBrand Agent: [Rating]/10\nHumanizer: [Rating]/10\nSpecific Criticisms:\n\nBlog Writer: [List criticisms, if any]\nGEO Analyst: [List criticisms, if any]\nBrand Agent: [List criticisms, if any]\nHumanizer: [List criticisms, if any]\nOverall Quality Assessment:\n[Provide a brief summary of the blog post's overall quality and any final recommendations.]\n\nProceed to Next Step? [Yes/No]",
+        "options": {
+          "systemMessage": "=Output Format: \n\n{\nassessment: {\nBlog Writer: \"\",\nGEO Analyst: \"\",\nBrand Agent: \"\",\nHumanizer: \"\",\n},\nSpecific Criticisms: {\nBlog Writer: \"\",\nGEO Analyst: \"\",\nBrand Agent: \"\",\nHumanizer: \"\",\n},\n\"Overall Quality Assessment\": \"\",\nProceed to next step: \"\"\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        4460,
+        10840
+      ],
+      "id": "d2478070-1ec5-4789-beda-0fc646587341",
+      "name": "QCA"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the raw input string from the previous node\nconst firstInput = $input.first().json;\nif (!firstInput.hasOwnProperty('output')) {\n  return [{ json: { error: \"Missing 'output' property in input data.\" } }];\n}\nconst rawText = firstInput.output;\n\n// Extract the JSON part from the string\nconst jsonString = rawText.replace(/```json\\n|\\n```/g, \"\").trim();\n\ntry {\n    // Parse the extracted string into a JSON object\n    const inputData = JSON.parse(jsonString);\n\n    // Create the transformed output structure\n    const transformedData = {\n        \"content\": {\n            \"assessment\": {},\n            \"Specific Criticisms\": {},\n            \"Overall Quality Assessment\": inputData[\"Overall Quality Assessment\"] || \"\",\n            \"Proceed to Next Step\": inputData[\"Proceed to next step\"] || \"No\"\n        },\n        \"refusal\": null,\n        \"annotations\": [],\n        \"logprobs\": null,\n        \"finish_reason\": \"stop\"\n    };\n\n    // Convert assessment scores to \"x/10\" format dynamically\n    if (inputData.assessment) {\n        for (const key in inputData.assessment) {\n            transformedData.content.assessment[key] = `${inputData.assessment[key]}/10`;\n        }\n    }\n\n    // Process Specific Criticisms dynamically\n    if (inputData[\"Specific Criticisms\"]) {\n        for (const key in inputData[\"Specific Criticisms\"]) {\n            const criticism = inputData[\"Specific Criticisms\"][key];\n            transformedData.content[\"Specific Criticisms\"][key] = criticism !== \"N/A\" ? criticism : \"\";\n        }\n    }\n\n    // Return the transformed JSON\n    return [{ json: transformedData }];\n\n} catch (error) {\n    return [{ json: { error: \"Failed to parse JSON\", details: error.message } }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4860,
+        10840
+      ],
+      "id": "390a861e-388f-471f-a794-15499854d6ab",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        11640
+      ],
+      "id": "e81a5ea8-1d9d-4061-a4bc-c789bf167a64",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cc2IiPWbF6EY9uGt",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $input.all().map(item => {\n  const data = item.json;\n  return `title: ${data.title}, link: ${data.link}, snippet: ${data.snippet}`;\n});\n\nreturn [\n  {\n    json: {\n      resultsArray: results\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2060,
+        11080
+      ],
+      "id": "44b66f53-c269-448f-9bf9-c9d356961b57",
+      "name": "Code4",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "humanizer"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        5740,
+        10900
+      ],
+      "id": "11699d51-6f03-42f1-bc80-9809d4c2cea1",
+      "name": "Simple Memory7"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        5560,
+        10900
+      ],
+      "id": "88d92488-e1b5-40bc-a78e-dfb977976500",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cc2IiPWbF6EY9uGt",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        4200,
+        11060
+      ],
+      "id": "06f4b3be-95a4-4194-bed0-47b76a214240",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Okay, let's craft a prompt for your Senior Editor Agent. This agent will be the final touchpoint, refining the blog post based on the feedback from the Quality Control Agent.\n\nRole: Senior Editor & Final Reviewer\n\nGoal: Review the provided blog post and the accompanying Quality Control (QC) Agent's assessment, including ratings and specific criticisms. Perform a final edit to enhance the blog post's readability, SEO effectiveness, and GEO optimization, directly addressing the feedback provided by the QC Agent and ensuring a high-quality final output.\n\nInput Data:\nThe final Blog: \n{{ $('Merge').all().map(item => item.json.output).join('\\n') }}\n\n\nRating for each side:\nBlog Writing: {{ $json.content.assessment['Blog Writer'] }}\nGEO: {{ $json.content.assessment['GEO Analyst'] }}\nBrand Elements: {{ $json.content.assessment['Brand Agent'] }}\nContent Humanizer: {{ $json.content.assessment.Humanizer }}\n\nCriticicms: \nBlog Criticism: {{ $json.content['Specific Criticisms']['Blog Writer'] }}\nGEO Criticism: {{ $json.content['Specific Criticisms']['GEO Analyst'] }}\nBrand Criticism: {{ $json.content['Specific Criticisms']['Brand Agent'] }}\nHumaniser Criticism: {{ $json.content['Specific Criticisms'].Humanizer }}\n\nOverall Assessment: \n{{ $json.content['Overall Quality Assessment'] }}\n\nTasks:\n\nReview QC Agent Feedback: Carefully read and understand the \"assessment,\" \"Specific Criticisms,\" and \"Overall Quality Assessment\" provided by the QC Agent. Pay close attention to the areas where improvements were suggested.\nAddress Blog Writer Criticisms: Edit the blog post to improve conciseness, streamline wordy sentences, and remove any identified redundancies. Ensure the writing is polished and flows smoothly.\nAddress Brand Agent Criticisms: Revise the brand mentions of \"Web Innoventix\" to be more subtle and organically integrated into the content. Focus on showcasing the brand's expertise and value proposition rather than simply stating the name repeatedly. Look for opportunities to naturally weave in the brand's thinking and focus on B2B solutions.\nReview for Readability: Conduct a final review of the entire blog post to ensure it is engaging, easy to understand, and flows logically for the reader. Check for any remaining grammatical errors, typos, or awkward phrasing.\nFinal SEO Polish: Ensure that the blog post remains well-optimized for search engines. Verify that keywords are naturally integrated and that the overall structure and content are SEO-friendly.\nFinal GEO Polish: Confirm that the edits made do not negatively impact the post's optimization for Generative AI models. Ensure clarity, accuracy, and a structure that facilitates AI understanding and summarization are maintained or enhanced.\nOutput Format: Provide the final, fully edited blog post that incorporates all the necessary revisions based on the QC Agent's feedback and your expert editorial judgment.\n\nInstructions for the Agent:\n\n\"You are a Senior Editor tasked with the final review and editing of a blog post. You will receive the blog post along with an assessment from a Quality Control Agent. Your goal is to address the feedback provided by the QC Agent and ensure the blog post is of the highest quality for both human readers and AI systems (SEO & GEO).\n\nSpecifically, pay close attention to the 'Specific Criticisms' section of the QC Agent's report. Make direct edits to the blog post to resolve these issues. For example, if the QC Agent noted that the brand mentions are too repetitive, you should revise those sections to integrate the brand more naturally.\n\nIn addition to addressing the specific criticisms, perform a final polish of the entire blog post for readability, flow, grammar, and tone. Ensure that the SEO and GEO optimizations remain strong after your edits.\n\nOutput the complete, final version of the edited blog post.\n\nNOTE: I don't need something like Okay, here's the final, *final* edited blog post, incorporating *this* round of feedback from the QC Agent or what you did or the things you changed and all. JUST GIVE ME THE FINAL BLOG NOTHING ELSE",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        5560,
+        10620
+      ],
+      "id": "efd0fe1a-0e52-4958-8976-9f3353e2187a",
+      "name": "Senior Editor"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a team of a blog content creation for web innoventix (a web development company)\n\nYour job is to assign the accurate tags and categories to a blog post based on the blog content. \nSo you'll be assigning one or more tags and categories to a blog post and should return their id. \n\nThe Blog content: \nThis blog is about Web design in figma \n\nCategory list and their IDs: \n\nBranding = 82\n \nWeb Design = 83\n\nWeb Development = 84\n\nLogo Design = 85\n\nUser Experience (UX) = 86 \n\nConversion Rate Optimization (CRO) = 87\n\nBusiness Growth = 88\n\nDigital Strategy = 89\n\nEntrepreneurship = 90\n\n\n\nTags list and their IDs: \n\nPsychology in Logo Design = 91\n \nConversion-focused Design = 92\n\nCRO in Figma = 93 \n\nSales-Driven Websites = 94\n\nBranding Strategy = 95\n\nBrand Identity Creation = 96\n\nSales Optimization = 97\n\nStorytelling in Branding = 98\n\nDesign Psychology = 99\n\nHigh-Converting Websites = 100\n\nLogo Psychology = 101\n\nEmotional Branding = 102\n\nResponsive Design = 103\n\nWordPress Development = 104\n\nUI/UX Design = 105\n\nFigma Prototypes = 106 \n\nFrontend Development = 107\n\nLanding Page Optimization = 108\n\nE-commerce Design = 109\n\nMobile Optimization = 110 \n\nDesign to Code = 111\n\nPersonal Branding = 112 \n\nStartups and Branding = 113\n\nBrand Voice = 114\n\nVisual Identity = 115\n\nBuilding a Brand from Scratch = 116\n\nFull Branding Package = 117\n\nBrand Guidelines = 118\n\nFigma = 119 \n\nWordPress = 120 \n\nSEO for Web Design = 121\n\nWebsite Performance = 122\n\nNOTE: The output should be only the array of IDs and nothing else: (example: [21,11])\n\nGive category and tag seperately",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        7960,
+        11020
+      ],
+      "id": "3faf7ae8-a3f2-468a-8cf9-f82130136eac",
+      "name": "Category & Tags Generator"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the input data\nconst input = $input.first().json.output;\n\n// Extract categories and tags using RegEx\nconst categoryMatch = input.match(/Categories:\\s*\\[([^\\]]*)\\]/);\nconst tagMatch = input.match(/Tags:\\s*\\[([^\\]]*)\\]/);\n\n// Convert string to array of numbers\nconst categories = categoryMatch ? categoryMatch[1].split(',').map(item => Number(item.trim())) : [];\nconst tags = tagMatch ? tagMatch[1].split(',').map(item => Number(item.trim())) : [];\n\n// Return as n8n JSON output\nreturn [\n  {\n    json: {\n      categories,\n      tags\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8320,
+        11020
+      ],
+      "id": "4ac674b2-7884-4ea8-9259-6e6fc0dbe5c1",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      cleanedHtml: $input.first().json.output\n        .replace(/^```html\\s*/i, \"\") // Removes starting ```html and any whitespace/newlines\n        .replace(/^```/, \"\")         // Removes lone ```\n        .replace(/```$/, \"\")         // Removes ending ```\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6660,
+        11020
+      ],
+      "id": "092fc03e-f285-4c1a-b0b3-f1b1ae0e594a",
+      "name": "Code5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Post plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check as completed on Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planner Agent": {
+      "main": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detailed Plan": {
+      "main": [
+        [
+          {
+            "node": "Blog Writer Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Blog Writer Agent": {
+      "main": [
+        [
+          {
+            "node": "GEO Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Detailed Plan",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Blog Writer Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "GEO Analyst",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Brand Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Humanizer",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "QCA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Internal Citations": {
+      "main": [
+        [
+          {
+            "node": "HTML Converter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Converter": {
+      "main": [
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SLUG Generator": {
+      "main": [
+        [
+          {
+            "node": "TITLE Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TITLE Generator": {
+      "main": [
+        [
+          {
+            "node": "META TAGS Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Internal Citations",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "SLUG Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "TITLE Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "META TAGS Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Category & Tags Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "HTML Converter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "META TAGS Generator": {
+      "main": [
+        [
+          {
+            "node": "Category & Tags Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GEO Analyst": {
+      "main": [
+        [
+          {
+            "node": "Brand Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brand Agent": {
+      "main": [
+        [
+          {
+            "node": "Humanizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Humanizer": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post plan": {
+      "main": [
+        [
+          {
+            "node": "Planner Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress1": {
+      "main": [
+        [
+          {
+            "node": "Check as completed on Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "All Posts": {
+      "main": [
+        [
+          {
+            "node": "combiner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "combiner": {
+      "main": [
+        [
+          {
+            "node": "Internal Citations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Senior Editor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "All Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QCA": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Planner Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Research Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Detailed Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory7": {
+      "ai_memory": [
+        [
+          {
+            "node": "Senior Editor",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Senior Editor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "QCA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Senior Editor": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Category & Tags Generator": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Wordpress1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "SLUG Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8c8ae2ba-3e22-4024-bc2a-a1cbe2029c98",
+  "meta": {
+    "instanceId": "3c1c25a53e477eb714ca9867aeb350ed16cde5e3f415243bdfafb8e012c0906b"
+  },
+  "id": "Pl5t6h39VsGYaKxN",
+  "tags": [
+    {
+      "createdAt": "2025-04-19T04:46:08.262Z",
+      "updatedAt": "2025-04-19T04:46:08.262Z",
+      "id": "bx04qhNRPEqAAtFw",
+      "name": "marketing-automation"
+    }
+  ]
+}

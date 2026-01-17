@@ -1,0 +1,238 @@
+{
+  "name": "YouTube Data Scraper",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        -20
+      ],
+      "id": "cd787753-10c6-416e-b324-4c81ff13b99f",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "functionCode": "const items = $node['Search YouTube API'].json.items;\n\n// Map through the items returned from the YouTube API and extract necessary information\nconst results = items.map(item => {\n    return {\n        channelTitle: item.snippet.channelTitle, // Channel Name\n        channelId: item.snippet.channelId,       // Channel ID\n        description: item.snippet.description,   // Channel Description\n        publishedAt: item.snippet.publishedAt    // Date the channel was published\n    };\n});\n\n// Return the processed results\nreturn results;\n"
+      },
+      "name": "Extract Channel Info",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        500,
+        -20
+      ],
+      "notesInFlow": true,
+      "id": "8f0b4bc2-55b9-4c09-9713-cc5b5192accb",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1KBW_rqMUZHmwuuxltB_dHjZxOnpRUFOq4xwwcri_Hgs",
+          "mode": "list",
+          "cachedResultName": "YouTube Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KBW_rqMUZHmwuuxltB_dHjZxOnpRUFOq4xwwcri_Hgs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KBW_rqMUZHmwuuxltB_dHjZxOnpRUFOq4xwwcri_Hgs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "channelTitle",
+              "displayName": "channelTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "channelId",
+              "displayName": "channelId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "publishedAt",
+              "displayName": "publishedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "name": "Store Data in Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        700,
+        -20
+      ],
+      "notesInFlow": true,
+      "id": "730e8f1c-7060-4a5a-80c7-e5757331773e",
+      "typeVersion": 4.5,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bv8dzpMQQ1JiF6NI",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8383d5b0-6a4d-4c69-bd91-19f87b2d7f45",
+              "name": "niche",
+              "value": "business coach",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Niche Input",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        80,
+        -20
+      ],
+      "notesInFlow": true,
+      "id": "35e49b7d-3836-415f-a463-38048e37c9a4",
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "snippet"
+            },
+            {
+              "name": "q",
+              "value": "={{ $json.niche }}"
+            },
+            {
+              "name": "type",
+              "value": "channel"
+            },
+            {
+              "name": "key"
+            },
+            {
+              "name": "regionCode",
+              "value": "US"
+            },
+            {
+              "name": "maxResults",
+              "value": "50"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Search YouTube API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        280,
+        -20
+      ],
+      "notesInFlow": true,
+      "id": "ce93b851-ea9f-4f92-b683-4c8d5ad86d7d",
+      "typeVersion": 4.2
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Extract Channel Info": {
+      "main": [
+        [
+          {
+            "node": "Store Data in Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Niche Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Niche Input": {
+      "main": [
+        [
+          {
+            "node": "Search YouTube API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search YouTube API": {
+      "main": [
+        [
+          {
+            "node": "Extract Channel Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "333aee07-1ad2-41a1-b936-b29143abaf13",
+  "meta": {
+    "instanceId": "7a31c35f6db673f223373f1c93209851594a325e7eca636c28089efb87cb7f0e"
+  },
+  "id": "61RL2iBeW1wSTpF2",
+  "tags": []
+}

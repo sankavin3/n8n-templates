@@ -1,0 +1,150 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e86f76ff-487b-4a0b-a268-c0682b0756b6",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items.filter(item => item.json.Submitted !== true && item.json.Submitted !== 'TRUE');"
+      },
+      "id": "4224dd19-e150-4230-97db-dd70dd8f61a5",
+      "name": "Filter Unsubmitted",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.indexnow.org/indexnow",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"host\": \"www.niral.ai\",\n  \"key\": \"949df00bc2434c26a40a732cd6901009\",\n  \"keyLocation\": \"https://www.niral.ai/949df00bc2434c26a40a732cd6901009\",\n  \"urlList\": [\"{{ $json.URL }}\"]\n}"
+      },
+      "id": "f3a63aea-0ac3-4559-b7a6-28b6c61e1249",
+      "name": "Submit to IndexNow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items.map((item, index) => {\n  item.json.rowIndex = index + 2;\n  return item;\n});"
+      },
+      "id": "dbc66401-27e7-43ee-b6ad-ebec02826b9a",
+      "name": "Add Row Index",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1nC9s3kJQCVzuUA7DuandDT5v6NOzLzGEqv4zko-I_r0",
+          "mode": "list",
+          "cachedResultName": "Google Sheets-Based IndexNow Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nC9s3kJQCVzuUA7DuandDT5v6NOzLzGEqv4zko-I_r0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nC9s3kJQCVzuUA7DuandDT5v6NOzLzGEqv4zko-I_r0/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -440,
+        -120
+      ],
+      "id": "c832d067-ae71-44d7-8437-3334b2de405e",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "keAuPhB09GZ09MAf",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Filter Unsubmitted": {
+      "main": [
+        [
+          {
+            "node": "Add Row Index",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Filter Unsubmitted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Row Index": {
+      "main": [
+        [
+          {
+            "node": "Submit to IndexNow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b17aa629-5d82-4e20-ab48-bf45fa8aa730",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7d04760e2dce88d9179312c6cc531a044fe49bec3266a23e2799d3831cdf6ca2"
+  },
+  "id": "6d6aIFhKLtnQ8m1J",
+  "tags": []
+}
