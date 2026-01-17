@@ -36,8 +36,7 @@
             }
         }
         .navbar {
-            background: rgba(124, 58, 237, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
             border-bottom: 1px solid rgba(139, 92, 246, 0.3);
             z-index: 1020;
         }
@@ -80,6 +79,72 @@
             font-weight: 300;
             color: rgba(255, 255, 255, 0.9);
             animation: fadeInUp 1s ease-out 0.5s both;
+        }
+        .hero .btn {
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+            border: none;
+            color: #7c3aed;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .hero .btn-outline-light {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .hero .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+        }
+        .hero .btn-outline-light:hover {
+            background: white;
+            color: #7c3aed;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);
+        }
+        .hero .badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        .section-title {
+            color: #7c3aed;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            margin: 10px auto 0;
+            border-radius: 2px;
         }
         .card {
             background: white;
@@ -182,7 +247,7 @@
         }
         .card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(124, 58, 237, 0.2);
+            box-shadow: 0 12px 40px rgb a(124, 58, 237, 0.2);
         }
         footer {
             background: linear-gradient(135deg, #7c3aed, #8b5cf6);
@@ -232,6 +297,7 @@
 
     <header class="hero" id="hero">
         <div class="container">
+            <div class="badge">AI Agents & Automation</div>
             <h1>Santhosh HL - AI Agents Portfolio</h1>
             <p>Explore my collection of powerful n8n workflows for SEO, marketing, and content creation. Discover my marketing portfolio and connect with me.</p>
             <div class="mt-4">
